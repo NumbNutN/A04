@@ -9,12 +9,12 @@
 
 ### 提交规范
 
-+ 使用 pull request，最好不好强制提交
++ 可以使用 pull request，也可以直接push
 + 分支不要求干净
 
 ### 用例介绍
 
 + classification_base_on_BOW.py
 
-一个基于词袋和简单线性分类器的Hello World
+一个基于词袋模型特征模型和简单线性分类器的分类模型的Hello World
 采集了train2.csv 婚恋交友 和 信贷理财 两个标签的 线性分类模型
