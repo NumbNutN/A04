@@ -18,3 +18,26 @@
 
 一个基于词袋和简单线性分类器的Hello World
 采集了train2.csv 婚恋交友 和 信贷理财 两个标签的 线性分类模型
+
++ photo_gets.py
+
+selenium实现对网页快照的截取(图片形式)
+
+### 项目依赖
+
+python解释器 3.7.16
+  
+spacy 3.5.0
++ tool/classification_tool.py
++ tool/feature_extraction_tool.py
++ classification_base_on_BOW.py
+
+numpy 1.21.6
++ tool/evaluation_tool.py
++ classification_base_on_BOW.py
+  
+selenium 4.8.2
++ photo_gets.py
+  
+scikit-learn 1.0.2
++ classification_base_on_BOW.py
