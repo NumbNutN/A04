@@ -1,6 +1,7 @@
 ### 代码规范
 
-+ 供其他人使用的代码最好写好功用和参数、返回值等注释，参数和返回值类型最好显示的标注
++ 供其他人使用的代码最好写好功用和参数、返回值等注释，参数和返回值类型最好显式的标注数据类型
++ 注释推荐采用VSCode插件"autoDocstring - Python Docstring Generator"进行模板生成
 
 ### 项目组织规范
 
@@ -9,14 +10,14 @@
 
 ### 提交规范
 
-+ 使用 pull request，最好不好强制提交
++ 可以使用 pull request，也可以直接push
 + 分支不要求干净
 
 ### 用例介绍
 
 + classification_base_on_BOW.py
 
-一个基于词袋和简单线性分类器的Hello World
+一个基于词袋模型特征模型和简单线性分类器的分类模型的Hello World
 采集了train2.csv 婚恋交友 和 信贷理财 两个标签的 线性分类模型
 
 + photo_gets.py
