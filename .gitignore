@@ -1,5 +1,8 @@
-/test
 /tool/__pycache__
 /driver
 /script
 /media
+/destBin
+
+/data
+/commit_draft.txt

@@ -3,8 +3,28 @@
 #  -- 用于训练测试数据预处理，特征工程等                                              #
 #  -- 通过 import classification_tool as cft 使用 cft.func                          #
 ####################################################################################
+
+#特征工程 - 文本分词需要使用
 import spacy
+
+#读取xlsx文件需要使用
+from openpyxl import load_workbook
+
+#读取csv文件需要使用
 import csv
+
+class DataFeature:
+
+    #从项目根路径开始
+    dataSetPath:str = "data/"
+
+    dataFeatureList:list = \
+    [
+        {"fileName":"train2.csv","type":"信贷理财","range":range(1,515)},
+        {"fileName":"train2.csv","type":"刷单诈骗","range":range(725,865)},
+        {"fileName":"train2.csv","type":"婚恋交友","range":range(867,977)},
+        {"fileName":"train2.csv","type":"刷单诈骗","range":range(725,865)},
+    ]
 
 
 def read_csv_context(filename:str,row_range:range,col:int = 1) -> list:
@@ -39,6 +59,41 @@ def read_csv_context(filename:str,row_range:range,col:int = 1) -> list:
                 data.append(row[col])
             cnt += 1
     return data
+
+def read_xlsx_context(filename:str,row_range:range,col:int) -> list:
+    """读取csv文件并依据指定的行数范围和列数将文本装载在列表中返回
+
+    Args:
+        filename (str): csv文件的路径
+        row_range (range):  行数范围
+        col (int): 列数,由于数据集的数据排布是纵向，该方法依据一个范围的排读取指定列
+
+    Returns:
+        list: 装载文本的列表
+
+    Example:
+        read_xlsx_context("xx.xlsx",range(1,4),1)
+        return:csv文件的第2,3,4排的第2列将作为数组的元素
+        ["row2 col2","row3 col2","row4 col2"]
+    
+    Info:
+        Created by LGD on 2023-3-9
+        Last update on 2023-3-9
+    
+    """
+
+    mapping_dict = {0:'A',1:'B',2:'C'}
+    ws = load_workbook(filename)
+    data:list = []
+
+    cnt:int = 0
+    for cell in ws["Sheet1"][mapping_dict[col]]:
+        if cnt in row_range:
+            data.append(cell.value)
+        cnt += 1
+
+    return data
+
 
 
 

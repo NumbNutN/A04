@@ -36,7 +36,7 @@ from tool import evaluation_tool as elt
 ####################################################################################
 
 # 加载网页文本快照数据 train.csv
-filename = "D:\\url_data\\train2.csv"
+filename = "./data/train2.csv"
 # 数据集范围 定义从csv文件中提取的数据的范围
 data_range = range(650,800)
 # 数据的第651 - 800 个词条
