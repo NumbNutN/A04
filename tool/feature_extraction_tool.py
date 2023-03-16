@@ -12,6 +12,7 @@ from openpyxl import load_workbook
 
 #读取csv文件需要使用
 import csv
+import numpy as np
 
 class DataFeature:
 
@@ -123,6 +124,25 @@ def split_word(nlp:spacy.Language,sentence:str,split_word:str = ' ') -> str:
     return split_word.join(word for word in lst)
 
 
+def split_word_sentence_to_split_word_list(sentence:str) -> list:
+    """将分词的句子转为单词的列表
+
+    Args:
+        sentence (str): 分词的字符串
+
+    Returns:
+        list: 该字符串所有单词的列表
+
+    Example:
+        split_word_sentence_to_split_word_list("唤醒 自己 沉睡 的 财产 房产")
+        return:["唤醒" ,"自己" ,"沉睡" ,"的" ,"财产" ,"房产"]
+
+    Info:
+        Created by LGD on 2023-3-15
+        Last update on 2023-3-15
+    """
+    return sentence.split(' ')
+
 
 def split_word_arr(nlp:spacy.Language,sentence_arr:list,split_word:str = ' ') -> list:
     """将一个句子以split_word为间隔进行分词
@@ -151,6 +171,42 @@ def split_word_arr(nlp:spacy.Language,sentence_arr:list,split_word:str = ' ') ->
         
     return sentence_list
 
+def word_gather_arr_to_vec(nlp:spacy.Language,word_gather_arr:list) -> list:
+    """将单词集合的列表转换为词向量的列表
 
+    Args:
+        nlp (spacy.Language): spacy Language模型
+        word_gather_arr (list): 单词集合列表
+
+    Returns:
+        list: 词向量的列表
+
+    Example:
+        word_gather_arr_to_vec([['cat','dog'],['red','blue']])
+        result: [[333,222,444],[555,333,444]]  每个元素为输入的每个单词集合的词向量的拼接
+
+    Info:
+        Created by LGD on 2023-3-15
+        Last update on 2023-3-15
+
+    Update:
+        2023-3-16 将输出结果由词向量的扁平拼接改为（单词数,300)的矩阵
+    """
+    embedding = []
+    embedding_list = []
+    for word_gather in word_gather_arr:
+        for word in word_gather:
+            embedding:np.ndarray = np.append(embedding,nlp.vocab[word].vector)
+        embedding_list.append(embedding)
+        embedding = []
+
+    new_embedding_list = []
+    for i in range(len(word_gather_arr)):
+        embedding = embedding_list[i].reshape(len(word_gather_arr[i]),-1)
+        new_embedding_list.append(embedding)
+        
+
+
+    return new_embedding_list
 
 
