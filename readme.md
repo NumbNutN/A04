@@ -42,6 +42,17 @@ selenium 4.8.2
   
 scikit-learn 1.0.2
 + classification_base_on_BOW.py
++ tool/feature_extraction_tool.py
 
 openpyxl 3.1.2
 + tool/classification_tool.py
+
+模型
++ zh_core_web_md
+```
+nlp = spacy.load("zh_core_web_md)
+```
++ zh_core_web_sm
+```
+nlp = spacy.load("zh_core_web_sm)
+```

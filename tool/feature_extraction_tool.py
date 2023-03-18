@@ -14,6 +14,9 @@ from openpyxl import load_workbook
 import csv
 import numpy as np
 
+#降维等其他矩阵运算
+from sklearn.manifold import TSNE
+
 class DataFeature:
 
     #从项目根路径开始
@@ -171,6 +174,55 @@ def split_word_arr(nlp:spacy.Language,sentence_arr:list,split_word:str = ' ') ->
         
     return sentence_list
 
+def split_word_single_arr(nlp:spacy.Language,sentence_arr:list,throwStopWord:bool = False) -> list:
+    """将一个句子以单词为单位分割为单词的列表
+
+    Args:
+        nlp (spacy.Language): spacy Language模型
+        sentence_arr (list): 未分词的中文
+
+    Returns:
+        list: 分词后的列表
+
+    Example:
+        split_word_arr(nlp,["唤醒自己沉睡的财产房产","骗子竟是东方基金"])
+        return:[["唤醒" ,"自己" ,"沉睡", "的" ,"财产" ,"房产"],["骗子","竟是","东方" ,"基金"]]
+
+    Info:
+        Created by LGD on 2023-3-16
+        Last update on 2023-3-16
+    """
+    word_gather_list = []
+    for sentence in sentence_arr:
+        words = nlp(sentence)
+        word_gather_list.append([str(word) for word in words])
+    
+    return word_gather_list
+
+
+def text_list_throw_stop_word(word_gather_list:list,stopWord:list) ->list:
+    """依据停用词列表去除停用词
+
+    Args:
+        sentence_arr (list): 单词集列表
+        stopWord (list): 停用词列表
+
+    Returns:
+        list: 
+
+    Example:
+        func([['天气','好'],['你','好']],['好'])
+        return:[['天气'],['你']]
+    """
+    new_word_gather_list = []
+    for word_gather in word_gather_list:
+        new_word_gather = [word for word in word_gather if word not in stopWord]
+        new_word_gather_list.append(new_word_gather)
+
+    return new_word_gather_list
+
+
+
 def word_gather_arr_to_vec(nlp:spacy.Language,word_gather_arr:list) -> list:
     """将单词集合的列表转换为词向量的列表
 
@@ -209,4 +261,42 @@ def word_gather_arr_to_vec(nlp:spacy.Language,word_gather_arr:list) -> list:
 
     return new_embedding_list
 
+
+def lower_dimension(array:np.ndarray) -> np.ndarray:
+    """对高维向量进行降维
+       似乎可以将任一的高维矩阵降成2维        
+    
+    Args:
+        array (np.ndarray): 高维向量
+
+    Returns:
+        np.ndarray: 降维向量
+
+    Info:
+        Created by LGD on 2023-3-16
+        Last update on 2023-3-16
+    """
+    tsne = TSNE()
+    return tsne.fit_transform(array)
+
+
+#TODO 尚未完成
+def count_word_freq(word_gather:list) -> dict:
+    """获取一个单词的集合（列表），将返回一个记录了所有单词的出现次数的字典
+
+    Args:
+        word_gather (list): 单词集合
+
+    Returns:
+        dict: 词频字典
+
+    Example:
+        count_word_freq(["cat","cat","mouse"])
+        return:{"cat":2,"mouse":1}
+
+    Info:
+        Created by LGD on 2023-3-16
+        Last update on 2023-3-16
+    """
+    pass
 
