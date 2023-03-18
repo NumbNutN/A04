@@ -22,13 +22,31 @@ class DataFeature:
     #从项目根路径开始
     dataSetPath:str = "data/"
 
+    
+################################################################
+#   update on 2023-3-18                                         #
+#   数据集train2.csv的排列发生了改动                              #
+#   请使用excel对数据集进行一些微小的改动已支持dataFeatureList的变动#
+#   使用excel打开train2.csv 选中标签所在列——排序——升序——保存改动    #
+##################################################################
+    
     dataFeatureList:list = \
     [
-        {"fileName":"train2.csv","type":"信贷理财","range":range(1,515)},
-        {"fileName":"train2.csv","type":"刷单诈骗","range":range(725,865)},
-        {"fileName":"train2.csv","type":"婚恋交友","range":range(867,977)},
-        {"fileName":"train2.csv","type":"刷单诈骗","range":range(725,865)},
+        {"fileName":"train2.csv","type":"信贷理财","range":range(2,723)},
+        {"fileName":"train2.csv","type":"刷单诈骗","range":range(725,1027)},
+        {"fileName":"train2.csv","type":"婚恋交友","range":range(1167,7210)},
+        {"fileName":"train3.xlsx","type":"购物消费","range":range(243,430)},
+        {"fileName":"train2.csv","type":"刷单诈骗","range":range(725,743)},
+        {"fileName":"train2.csv","type":"婚恋交友","range":range(867,977)}
     ]
+    # [
+    #     {"fileName":"train2.csv","type":"信贷理财","range":range(1,515)},
+    #     {"fileName":"train2.csv","type":"刷单诈骗","range":range(757,865)},
+    #     {"fileName":"train2.csv","type":"婚恋交友","range":range(2150,2309)},
+    #     {"fileName":"train3.xlsx","type":"购物消费","range":range(243,430)},
+    #     {"fileName":"train2.csv","type":"刷单诈骗","range":range(725,743)},
+    #     {"fileName":"train2.csv","type":"婚恋交友","range":range(867,977)}
+    # ]
 
 
 def read_csv_context(filename:str,row_range:range,col:int = 1) -> list:

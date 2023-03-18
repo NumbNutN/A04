@@ -39,7 +39,7 @@ def evaluate_callback(matrix:np.ndarray) -> list:
     for i in range(matrix.shape[0]):
         for j in range(matrix.shape[1]):
             cnt_tp_and_fp += matrix[i][j]
-        call_lst.append(matrix[j][j] / cnt_tp_and_fp)
+        call_lst.append(matrix[i][i] / cnt_tp_and_fp)
         cnt_tp_and_fp = 0
     
     return call_lst

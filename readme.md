@@ -47,7 +47,13 @@ scikit-learn 1.0.2
 openpyxl 3.1.2
 + tool/classification_tool.py
 
-模型
+pillow 9.4.0
++ photo_gets.py
+
+pytesseract 0.3.10
++ photo_gets.py
+
+#### 模型
 + zh_core_web_md
 ```
 nlp = spacy.load("zh_core_web_md)

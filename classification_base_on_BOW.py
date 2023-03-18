@@ -41,16 +41,53 @@ filename = "./data/train2.csv"
 data_range = range(650,800)
 # 数据的第651 - 800 个词条
 
-label_str_lst = ["信贷理财","婚恋交友"]
+label_str_lst = ["购物消费","婚恋交友","信贷理财","刷单诈骗"]
+
+# 训练集信息类
+dfl = fet.DataFeature()
+# 3分类
+
+#数据集
+text_list = []
+#数据标签
+label_list = []
+
+# update: 2023-3-18 增加了数据集数量并增加
+for i in range(0,3):
+    text_list.extend(fet.read_csv_context(
+                                filename="./data/"+dfl.dataFeatureList[i]["fileName"],
+                                row_range = dfl.dataFeatureList[i]["range"][0:180],
+                                col = 1))
+    label_list.extend(fet.read_csv_context(
+                                filename="./data/"+dfl.dataFeatureList[i]["fileName"],
+                                row_range =dfl.dataFeatureList[i]["range"][0:180],
+                                col = 2))
+    
+for i in range(3,4):
+    text_list.extend(fet.read_xlsx_context(
+                                filename="./data/"+dfl.dataFeatureList[i]["fileName"],
+                                row_range = dfl.dataFeatureList[i]["range"][0:180],
+                                col = 1))
+    label_list.extend(fet.read_xlsx_context(
+                                filename="./data/"+dfl.dataFeatureList[i]["fileName"],
+                                row_range =dfl.dataFeatureList[i]["range"][0:180],
+                                col = 2))
+
+# # 从csv表格中读取第2-4行的文本数据
+# text_list = fet.read_csv_context(filename,data_range)
+# # ["dogcatfish row2 col2","dogcatcat row3 col2","fishbird row4 col2"]
+
+# # 获取数据标签
+# label_lst = cft.get_label_from_csv(filename,data_range)
+print("标签获取完成", flush=True)
+
+# [1,2,2,0,0,3,4 ... ]
 
 
 ####################################################################################
 #                                     特征提取                                      #
 ####################################################################################
 
-# 从csv表格中读取第2-4行的文本数据
-text_list = fet.read_csv_context(filename,data_range)
-# ["dogcatfish row2 col2","dogcatcat row3 col2","fishbird row4 col2"]
 
 # 加载分词工具
 nlp = spacy.load('zh_core_web_sm')
@@ -73,16 +110,12 @@ print("词袋生成完成", flush=True)
 #                                      分类                                        #
 ####################################################################################
 
-# 获取数据标签
-label_lst = cft.get_label_from_csv(filename,data_range)
-print("标签获取完成", flush=True)
 
-# [1,2,2,0,0,3,4 ... ]
 
 # 切分训练集和测试集
 # 0.8 & 0.2
 x_train, x_test,y_train, y_test = \
-train_test_split(cv_fit.toarray(),label_lst,
+train_test_split(cv_fit.toarray(),label_list,
                  test_size=0.2,random_state=0)
 print("切分完成", flush=True)
 
