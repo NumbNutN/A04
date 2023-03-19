@@ -29,11 +29,11 @@ label_list = []
 for i in range(0,3):
     text_list.extend(fet.read_csv_context(
                                 filename="./data/"+dfl.dataFeatureList[i]["fileName"],
-                                row_range = dfl.dataFeatureList[i]["range"][0:2],
+                                row_range = dfl.dataFeatureList[i]["range"][0:180],
                                 col = 1))
     label_list.extend(fet.read_csv_context(
                                 filename="./data/"+dfl.dataFeatureList[i]["fileName"],
-                                row_range =dfl.dataFeatureList[i]["range"][0:2],
+                                row_range =dfl.dataFeatureList[i]["range"][0:180],
                                 col = 2))
     
 # 加载分词工具
@@ -79,7 +79,7 @@ for i in range(ori_len):
 word_set_list = [word_set[0:600] for word_set in word_set_list]
 
 # 将单词列表转化为词向量
-word_gather_vec = fet.word_gather_arr_to_vec(nlp,word_set_list)
+word_gather_vec = fet.wordGatherList_to_Matrix(nlp,word_set_list,is_flat=True)
 
 print("词向量转换完成")
 
@@ -96,9 +96,9 @@ for i in range(len(word_gather_vec)):
 
 
 
-low_dim_embedded = []
-for embedded in word_gather_vec:
-    low_dim_embedded.append(fet.lower_dimension(embedded))
+# low_dim_embedded = []
+# for embedded in word_gather_vec:
+#     low_dim_embedded.append(fet.lower_dimension(embedded))
 
 
 # 切分训练集和测试集
@@ -107,7 +107,7 @@ for embedded in word_gather_vec:
 from sklearn.model_selection import train_test_split
 
 x_train, x_test,y_train, y_test = \
-train_test_split(low_dim_embedded.toarray(),label_list,
+train_test_split(word_gather_vec,label_list,
                  test_size=0.2,random_state=0)
 print("切分完成", flush=True)
 

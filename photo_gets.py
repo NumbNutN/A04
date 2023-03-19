@@ -83,5 +83,5 @@ def get_textofphoto(path):
 
 
 # TEST LGD 2023-3-18
-get_photo(url1,path)
-get_textofphoto(path)
+# get_photo(url1,path)
+# get_textofphoto(path)

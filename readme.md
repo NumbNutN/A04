@@ -53,6 +53,9 @@ pillow 9.4.0
 pytesseract 0.3.10
 + photo_gets.py
 
+tensorflow 2.11.0
++ TextCNN/cnn_model.py
+
 #### 模型
 + zh_core_web_md
 ```

@@ -117,7 +117,19 @@ def read_xlsx_context(filename:str,row_range:range,col:int) -> list:
     return data
 
 
+def list_2_ndarray(int_lst:list) -> np.ndarray:
+    """将整数列表转为numpy数组
 
+    Args:
+        int_lst (list): 整数列表
+
+    Returns:
+        np.ndarray: numpy数组
+
+    Info:
+        Created by LGD on 2023-3-19
+    """
+    return np.array(int_lst)
 
 def split_word(nlp:spacy.Language,sentence:str,split_word:str = ' ') -> str:
     """将一个句子以split_word为间隔进行分词
@@ -218,6 +230,33 @@ def split_word_single_arr(nlp:spacy.Language,sentence_arr:list,throwStopWord:boo
     return word_gather_list
 
 
+def normalization_word_number(wordSetList:list,labelList:list,number:int) ->list:
+    """归一化单词数量，当数量小于number时会被剔除，大于number时会归一到number的数量
+
+    Args:
+        wordList (list): 需要归一化的单词集，为单词集合的列表
+        labelList (list):根据单词集的剔除情况
+
+    Returns:
+        list: 归一化后的列表
+
+    Info:
+        Created by LGD on 2023-3-19
+    """
+    i:int = 0
+    cnt:int = 0
+    ori_len:int = len(wordSetList)
+    while i < ori_len - cnt:
+        if len(wordSetList[i]) < number:
+            wordSetList.pop(i)
+            labelList.pop(i)
+            cnt += 1
+            i -= 1
+        i+=1
+
+    wordSetList = [word_set[0:600] for word_set in wordSetList]
+    return wordSetList,labelList
+
 def text_list_throw_stop_word(word_gather_list:list,stopWord:list) ->list:
     """依据停用词列表去除停用词
 
@@ -241,18 +280,18 @@ def text_list_throw_stop_word(word_gather_list:list,stopWord:list) ->list:
 
 
 
-def word_gather_arr_to_vec(nlp:spacy.Language,word_gather_arr:list) -> list:
+def wordGatherList_to_VectorList(nlp:spacy.Language,wordGatherList:list,is_flat:bool=False) -> list:
     """将单词集合的列表转换为词向量的列表
 
     Args:
         nlp (spacy.Language): spacy Language模型
-        word_gather_arr (list): 单词集合列表
+        wordGatherList (list): 单词集合列表
 
     Returns:
         list: 词向量的列表
 
     Example:
-        word_gather_arr_to_vec([['cat','dog'],['red','blue']])
+        wordGatherList_to_VectorList([['cat','dog'],['red','blue']])
         result: [[333,222,444],[555,333,444]]  每个元素为输入的每个单词集合的词向量的拼接
 
     Info:
@@ -264,20 +303,54 @@ def word_gather_arr_to_vec(nlp:spacy.Language,word_gather_arr:list) -> list:
     """
     embedding = []
     embedding_list = []
-    for word_gather in word_gather_arr:
+    for word_gather in wordGatherList:
         for word in word_gather:
             embedding:np.ndarray = np.append(embedding,nlp.vocab[word].vector)
         embedding_list.append(embedding)
         embedding = []
 
     new_embedding_list = []
-    for i in range(len(word_gather_arr)):
-        embedding = embedding_list[i].reshape(len(word_gather_arr[i]),-1)
+    for i in range(len(wordGatherList)):
+        embedding = embedding_list[i].reshape(len(wordGatherList[i]),-1)
         new_embedding_list.append(embedding)
         
 
-
     return new_embedding_list
+
+def wordGatherList_to_Matrix(nlp:spacy.Language,wordGatherList:list,is_flat:bool=False) -> np.ndarray:
+    """将单词集合的列表转换为词向量拼接的二维矩阵
+        注意，由于python列表的元素长度可以任意，
+            但二维ndarray的列数不可以，要求wordGather的长度必须归一化
+
+    Args:
+        nlp (spacy.Language): spacy Language模型
+        wordGatherList (list): 单词集合列表
+
+    Returns:
+        list: 词向量的列表
+
+    Example:
+        wordGatherList_to_Matrix([['cat','dog'],['red','blue']])
+        result: [[333,222,444],[555,333,444]]  每个元素为输入的每个单词集合的词向量的拼接
+
+    Info:
+        Created by LGD on 2023-3-15
+        Last update on 2023-3-15
+
+    Update:
+        2023-3-16 将输出结果由词向量的扁平拼接改为（单词数,300)的矩阵
+    """
+    embedding = []
+    for word_gather in wordGatherList:
+        for word in word_gather:
+            embedding:np.ndarray = np.append(embedding,nlp.vocab[word].vector)
+
+    embedding:np.ndarray = embedding.reshape(len(wordGatherList),-1)
+
+    if(not is_flat):
+        embedding = embedding.reshape(len(wordGatherList),len(wordGatherList[0]),300)
+
+    return embedding
 
 
 def lower_dimension(array:np.ndarray) -> np.ndarray:
