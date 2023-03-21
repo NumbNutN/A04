@@ -9,8 +9,8 @@
 #  -- Author: Created by LGD on 2023-3-9                                           #                                                              #
 ####################################################################################
 
-import sys
-sys.path.append(".")
+# import sys
+# sys.path.append(".")
 
 from tool import feature_extraction_tool as fet
 from tool import classification_tool as ct
@@ -33,13 +33,13 @@ from tool import classification_tool as ct
 for i in range(0,3):
     text_list.extend(fet.read_csv_context(
                                 filename="./data/"+dfl.dataFeatureList[i]["fileName"],
-                                row_range = dfl.dataFeatureList[i]["range"][0:5],
+                                row_range = dfl.dataFeatureList[i]["range"][0:60],
                                 col = 1))
     
     # 由于kears要求使用数字作为标签
     label_list.extend(ct.get_label_from_csv(
                                 filename="./data/"+dfl.dataFeatureList[i]["fileName"],
-                                row_range =dfl.dataFeatureList[i]["range"][0:5]
+                                row_range =dfl.dataFeatureList[i]["range"][0:60]
                                 ))
 
 
