@@ -1,8 +1,6 @@
 import tensorflow as tf
 
-import sys
-sys.path.append("..")
-from tool import feature_extraction_tool as fet
+
 
 class TCNNConfig(object):
     """CNN配置参数"""

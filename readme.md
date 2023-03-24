@@ -157,3 +157,47 @@ pip install scikit-learn
 pip install keras
 pip install tensorflow
 ```
+
+
+### 对GPU运算单元支持的项目依赖
+
+利用GPU的多线程并行计算单元来提高大型矩阵运算的速度
+在本项目中可以委托给GPU的任务包括：
++ 神经网络的训练
++ 词向量运算
+要实现这一点，项目的源代码不需要进行太多的更改，归功于我们压根没有自己调用GPU编程接口，而是借助科学计算库实现运算细节，后者严密的封装让你一般不会关注你的运算任务到底由哪个硬件部件来完成
+
+只需要确保本地环境有以下模块：
+##### 硬件：
++ 支持CUDA 11.2的NVIDIA GPU
+##### 软件：
++ CUDA 11.2
++ CUDnn 8.1.0
++ spacy 3.5.1
+建议在一个全新的虚拟环境中安装spacy，它和原先的CPU计算环境不可兼容
+
+[CUDA 历史版本](https://developer.nvidia.com/cuda-toolkit-archive)
+[CUDNN 历史版本](https://developer.nvidia.com/rdp/cudnn-archive)
+
+```
+#spacy 基于pip工具的安装方式
+pip install -U spacy[cuda112]
+```
+
+##### 坏消息
+tensorflow 2.6.0以后的新版本未测试对GPU运算的支持（它们大概率在GPU上跑不起来）
+而tensorflow 2.6.0以前的版本的软件依赖又和spacy[cuda112]产生了冲突
+因此目前的解决方案是将spacy词向量的运算交给GPU，而神经网络训练依然交给CPU
+我们的tensorflow采用和之前相同的2.11.0即可
+为了实现GPU数据和CPU数据的转换，spacy输出的词向量将转换为ndarray（CPU格式的数组）后交给tensorflow
+这是classification_base_on_CNN_&_vector_GPU和classification_base_on_CNN_&_vector较大的不同
+
+tensorflow2.11.0在我的环境中默认不使用GPU，如果你发现它使用了，使用以下代码禁用
+
+```
+import os
+os.environ["CUDA_VISIBLE_DEVICES"]="-1" 
+import tensorflow as tf
+#...
+```
+

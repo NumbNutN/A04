@@ -106,12 +106,15 @@ for i in range(len(word_gather_vec)):
 
 from sklearn.model_selection import train_test_split
 
-
+import cupy
 x_train, x_test,y_train, y_test = \
 train_test_split(word_gather_vec,label_list,
                  test_size=0.2,random_state=0)
 print("切分完成", flush=True)
 
+#转换为CPU类型
+x_train = cupy.asnumpy(x_train)
+x_test = cupy.asnumpy(x_test)
 
 from keras.models import Sequential
 from keras.layers import Conv1D, MaxPooling1D, Flatten, Dense
