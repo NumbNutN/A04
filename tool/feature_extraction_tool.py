@@ -35,21 +35,54 @@ class DataFeature:
         {"fileName":"train2.csv","type":"信贷理财","range":range(2,723)},
         {"fileName":"train2.csv","type":"刷单诈骗","range":range(725,1027)},
         {"fileName":"train2.csv","type":"婚恋交友","range":range(1167,7210)},
-        {"fileName":"train3.xlsx","type":"购物消费","range":range(243,430)},
-        {"fileName":"train2.csv","type":"刷单诈骗","range":range(725,743)},
-        {"fileName":"train2.csv","type":"婚恋交友","range":range(867,977)}
+
+        {"fileName":"train3.xlsx","type":"刷单诈骗","range":range(243,430)},
+        {"fileName":"train3.xlsx","type":"信贷理财","range":range(1,241)},
+        
+
+        {"fileName":"train2.csv","type":"婚恋交友","range":range(867,977)},
+        {"fileName":"more.csv","type":"Unknown","range":range(0,20642)},
+
+        # {"fileName":"more_haveContent0402.csv","type":"Unknown","range":range(0,100)},
+        # {"fileName":"more_haveContent0405.csv","type":"Unknown","range":range(0,20000)},
+
+        {"fileName":"more_haveContent0405.csv","type":"购物消费","range":range(0,9)},           #1      9           7
+        {"fileName":"more_haveContent0405.csv","type":"婚恋交友","range":range(9,5434)},        #2      5425        8
+        {"fileName":"more_haveContent0405.csv","type":"假冒身份","range":range(5434,5480)},     #3      46          9
+        {"fileName":"more_haveContent0405.csv","type":"钓鱼网站","range":range(5480,5848)},     #4      368         10
+        {"fileName":"more_haveContent0405.csv","type":"冒充公检法","range":range(5848,5850)},   #5      2           11
+        {"fileName":"more_haveContent0405.csv","type":"平台诈骗","range":range(5850,7311)},     #6      1461        12
+        {"fileName":"more_haveContent0405.csv","type":"招聘兼职","range":range(7311,7319)},     #7      8           13
+        {"fileName":"more_haveContent0405.csv","type":"杀猪盘","range":range(7319,7483)},       #8      164         14
+        {"fileName":"more_haveContent0405.csv","type":"博彩赌博","range":range(7483,7719)},     #9      236         15
+        {"fileName":"more_haveContent0405.csv","type":"信贷理财","range":range(7719,7738)},     #10     19
+        {"fileName":"more_haveContent0405.csv","type":"刷单诈骗","range":range(7738,7761)},     #11     23
+        {"fileName":"more_haveContent0405.csv","type":"中奖诈骗","range":range(7761,7764)},      #12     3
+
+        #扩充数据集
+        # {"fileName":"more_haveContent.csv","type":"购物消费","range":range(0,9)},           #1      9           7
+        # {"fileName":"more_haveContent.csv","type":"婚恋交友","range":range(9,5414)},        #2      5409        8
+        # {"fileName":"more_haveContent.csv","type":"假冒身份","range":range(5414,5460)},     #3      46          9
+        # {"fileName":"more_haveContent.csv","type":"钓鱼网站","range":range(5461,5828)},     #4      367         10
+        # {"fileName":"more_haveContent.csv","type":"冒充公检法","range":range(5828,5830)},   #5      2           11
+        # {"fileName":"more_haveContent.csv","type":"平台诈骗","range":range(5830,7249)},     #6      5830        12
+        # {"fileName":"more_haveContent.csv","type":"招聘兼职","range":range(7249,7257)},     #7      8           13
+        # {"fileName":"more_haveContent.csv","type":"杀猪盘","range":range(7257,7421)},       #8      164         14
+        # {"fileName":"more_haveContent.csv","type":"博彩赌博","range":range(7421,7655)},     #9      234         15
+        # {"fileName":"more_haveContent.csv","type":"信贷理财","range":range(7655,7674)},     #10     19
+        # {"fileName":"more_haveContent.csv","type":"刷单诈骗","range":range(7674,7697)},     #11     23
+        # {"fileName":"more_haveContent.csv","type":"中奖诈骗","range":range(7697,7700)},      #12     3
+
+        {"fileName":"more_haveContent.csv","type":"UnKnown","range":range(0,15733)}         
+
+
+        #测试集
+        #{"fileName":"train1.csv","type":None,"range":range(0.200)}
     ]
-    # [
-    #     {"fileName":"train2.csv","type":"信贷理财","range":range(1,515)},
-    #     {"fileName":"train2.csv","type":"刷单诈骗","range":range(757,865)},
-    #     {"fileName":"train2.csv","type":"婚恋交友","range":range(2150,2309)},
-    #     {"fileName":"train3.xlsx","type":"购物消费","range":range(243,430)},
-    #     {"fileName":"train2.csv","type":"刷单诈骗","range":range(725,743)},
-    #     {"fileName":"train2.csv","type":"婚恋交友","range":range(867,977)}
-    # ]
 
 
-def read_csv_context(filename:str,row_range:range,col:int = 1) -> list:
+
+def read_csv_context(filename:str,row_range:range,col:int = 1,decode:str='utf-8') -> list:
     """读取csv文件并依据指定的行数范围和列数将文本装载在列表中返回
         注意由于数据集的csv文件网页快照文本往往在第2列，
         col参数默认为第二列
@@ -58,6 +91,7 @@ def read_csv_context(filename:str,row_range:range,col:int = 1) -> list:
         filename (str): csv文件的路径
         row_range (range): 行数范围
         col (int): 列数，单个数据
+        decode (str): 编码方式
 
     Returns:
         list: 装载文本的列表
@@ -66,15 +100,16 @@ def read_csv_context(filename:str,row_range:range,col:int = 1) -> list:
         read_csv_context("xx.csv",range(1,4),1)
         return:csv文件的第2,3,4排的第2列将作为数组的元素
         ["row2 col2","row3 col2","row4 col2"]
-
+        
     Info:
         Created by LGD on 2023-3-9
+        update 2023-4-1 可自定义字符编码方式
         Last update on 2023-3-9
     
     """
     data = []
     cnt = 0
-    with open(filename,encoding="UTF8") as csvfile:
+    with open(filename,encoding=decode) as csvfile:
         csv_reader = csv.reader(csvfile)
         for row in csv_reader:
             if cnt in row_range:

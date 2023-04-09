@@ -28,18 +28,32 @@ label_list = []
 # 字符串标签转数字
 from tool import classification_tool as ct
 
-for i in range(0,3):
+for i in [0,1,2]:
     text_list.extend(fet.read_csv_context(
                                 filename="./data/"+dfl.dataFeatureList[i]["fileName"],
-                                row_range = dfl.dataFeatureList[i]["range"][0:40],
+                                row_range = dfl.dataFeatureList[i]["range"][0:200],
                                 col = 1))
     
     # 由于kears要求使用数字作为标签
     label_list.extend(ct.get_label_from_csv(
                                 filename="./data/"+dfl.dataFeatureList[i]["fileName"],
-                                row_range =dfl.dataFeatureList[i]["range"][0:40]
+                                row_range =dfl.dataFeatureList[i]["range"][0:200]
+                                ))
+for i in [10,12,15]:
+    text_list.extend(fet.read_csv_context(
+                                filename="./data/"+dfl.dataFeatureList[i]["fileName"],
+                                row_range = dfl.dataFeatureList[i]["range"][0:200],
+                                col = 1
+                                ))
+    
+    label_list.extend(fet.read_csv_context(
+                                filename="./data/"+dfl.dataFeatureList[i]["fileName"],
+                                row_range =dfl.dataFeatureList[i]["range"][0:200],
+                                col = 2
                                 ))
 
+# 字符串转为数字
+label_list = [int(label) for label in label_list]
 
 # 加载分词工具
 nlp = spacy.load('zh_core_web_md')
@@ -103,7 +117,6 @@ for i in range(len(word_gather_vec)):
 # 0.8 & 0.2
 # 数据测试集切分
 
-
 from sklearn.model_selection import train_test_split
 
 import cupy
@@ -113,6 +126,8 @@ train_test_split(word_gather_vec,label_list,
 print("切分完成", flush=True)
 
 #转换为CPU类型
+#2023-3-24
+#这是因为tensorflow仍然采用了CPU运算
 x_train = cupy.asnumpy(x_train)
 x_test = cupy.asnumpy(x_test)
 
@@ -145,9 +160,12 @@ model.add(Dense(units=num_classes, activation='softmax'))
 
 # 用分类交叉熵损失函数和adam优化器来编译模型
 model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
-
+#model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 #训练
 model.fit(x_train, y_train, epochs=11, validation_data=(x_test, y_test))
+
+#保存模型
+model.save("./model_6_200_0405")
 
 
 # 对测试集预测得到预测结果

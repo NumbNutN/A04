@@ -22,26 +22,6 @@ from selenium.webdriver.chrome.service import Service
 from PIL import Image
 import pytesseract
 
-###############################################################################测试所用变量
-url1 = "www.baidu.com"
-path = r"./media"
-url2 = "github.com"
-url3 = "www.bashansy.com"
-PathOfChrome = r"./driver/chromedriver_win32/chromedriver.exe"
-url_list = [url1,url2]
-################################################################################
-
-#全局变量，用于分析
-#exa:时间戳暂存变量
-#text:截屏所得的文本列表
-global exa
-global text
-##################################
-#设置截屏使用的浏览器
-#PathOfChrome是驱动绝对路径，此处使用Chrome
-####################
-driver = webdriver.Chrome(PathOfChrome)
-####################
 
 def timeout_record(url):#记录超时的链接，放入特定文件中
     with open('text.txt','a') as f:
@@ -82,6 +62,43 @@ def get_textofphoto(path):
     text = text.replace("“","").replace("。","").replace(" ","").replace("\n","")
 
 
-# TEST LGD 2023-3-18
-# get_photo(url1,path)
-# get_textofphoto(path)
+
+###############################################################################测试所用变量
+
+PathOfChrome = r"./driver/chromedriver_win32/chromedriver.exe"
+
+################################################################################
+
+#全局变量，用于分析
+#exa:时间戳暂存变量
+#text:截屏所得的文本列表
+global exa
+global text
+
+##################################
+#设置截屏使用的浏览器
+#PathOfChrome是驱动绝对路径，此处使用Chrome
+####################
+driver = webdriver.Chrome(executable_path = PathOfChrome)
+####################
+#指定图片保存路径
+imgSavePath = r"./test_data/img"
+
+##################################################################
+#                      批量读取URL
+##################################################################
+#批量获取url
+from tool import feature_extraction_tool as fet
+dfl = fet.DataFeature()
+urlList = fet.read_csv_context(
+                    filename="./data/"+dfl.dataFeatureList[0]["fileName"],
+                    row_range = dfl.dataFeatureList[0]["range"][1:100],
+                    col = 0)
+url1 = "www.baidu.com"
+get_photo(url1,imgSavePath)
+#get_photos_list(urlList,imgSavePath)
+
+
+
+
+
