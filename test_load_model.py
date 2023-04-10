@@ -27,18 +27,43 @@ label_list = []
 # 字符串标签转数字
 from tool import classification_tool as ct
 
-for i in range(0,3):
+# for i in range(0,3):
+#     text_list.extend(fet.read_csv_context(
+#                                 filename="./data/"+dfl.dataFeatureList[i]["fileName"],
+#                                 row_range = dfl.dataFeatureList[i]["range"][170:200],
+#                                 col = 1))
+    
+#     # 由于kears要求使用数字作为标签
+#     label_list.extend(ct.get_label_from_csv(
+#                                 filename="./data/"+dfl.dataFeatureList[i]["fileName"],
+#                                 row_range =dfl.dataFeatureList[i]["range"][170:200]
+#                                 ))
+for i in [0,1,2]:
     text_list.extend(fet.read_csv_context(
                                 filename="./data/"+dfl.dataFeatureList[i]["fileName"],
-                                row_range = dfl.dataFeatureList[i]["range"][170:200],
+                                row_range = dfl.dataFeatureList[i]["range"][0:30],
                                 col = 1))
     
     # 由于kears要求使用数字作为标签
     label_list.extend(ct.get_label_from_csv(
                                 filename="./data/"+dfl.dataFeatureList[i]["fileName"],
-                                row_range =dfl.dataFeatureList[i]["range"][170:200]
+                                row_range =dfl.dataFeatureList[i]["range"][0:30]
+                                ))
+for i in [10,12,15]:
+    text_list.extend(fet.read_csv_context(
+                                filename="./data/"+dfl.dataFeatureList[i]["fileName"],
+                                row_range = dfl.dataFeatureList[i]["range"][0:30],
+                                col = 1
+                                ))
+    
+    label_list.extend(fet.read_csv_context(
+                                filename="./data/"+dfl.dataFeatureList[i]["fileName"],
+                                row_range =dfl.dataFeatureList[i]["range"][0:30],
+                                col = 2
                                 ))
 
+# 字符串转为数字
+label_list = [int(label) for label in label_list]
 
 # 加载分词工具
 nlp = spacy.load('zh_core_web_md')
@@ -89,10 +114,7 @@ print("词向量转换用时%d" %(end_word2vec-start_word2vec))
 # 0.8 & 0.2
 # 数据测试集切分
 
-from sklearn.model_selection import train_test_split
-
 import cupy
-
 
 #转换为CPU类型
 #2023-3-24
@@ -103,8 +125,8 @@ from keras.models import Sequential
 
 import keras
 
-model:Sequential = keras.models.load_model("./model_6_200_0405")
+model:Sequential = keras.models.load_model("./model/model_6_200_0405")
 score = model.evaluate(word_gather_vec,label_list)
-print(score.metric)
+print(score)
 #预测模型
 
