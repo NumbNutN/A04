@@ -34,13 +34,13 @@ for i in range(0,3):
                                 ))
 # 加载分词工具
 nlp = spacy.load('zh_core_web_md')
-word_set_list = fet.split_word_single_arr(nlp,text_list)
+word_set_list = fet.split_to_word_set_from_sentence(nlp,text_list)
 print("分词完成")
 
 #去除停用词
 from spacy.lang.zh.stop_words import STOP_WORDS
 
-fet.text_list_throw_stop_word(word_set_list,list(STOP_WORDS))
+fet.word_set_throw_stop_word(word_set_list,list(STOP_WORDS))
 print("去除停用词完成")
 
 
@@ -55,7 +55,7 @@ label_list:np.ndarray = fet.list_2_ndarray(label_list)
 import time
 start_word2vec = time.time()
 # 将单词列表转化为词向量
-word_gather_vec = fet.wordGatherList_to_Matrix(nlp,word_set_list,is_flat=True)
+word_gather_vec = fet.wordSet_to_Matrix(nlp,word_set_list,is_flat=True)
 end_word2vec = time.time()
 print("词向量转换完成")
 

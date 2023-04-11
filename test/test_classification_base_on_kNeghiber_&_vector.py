@@ -54,13 +54,13 @@ for i in range(len(split_text_list)):
 #[["dog", "cat", "fish", "row2"], ["col2","dog", "cat", "cat", "row3", "col2"],["fish", "bird", "row4", "col2"]]
 '''
 
-word_set_list = fet.split_word_single_arr(nlp,text_list)
+word_set_list = fet.split_to_word_set_from_sentence(nlp,text_list)
 print("分词完成")
 
 #去除停用词
 from spacy.lang.zh.stop_words import STOP_WORDS
 
-fet.text_list_throw_stop_word(word_set_list,list(STOP_WORDS))
+fet.word_set_throw_stop_word(word_set_list,list(STOP_WORDS))
 print("去除停用词完成")
 
 
@@ -79,7 +79,7 @@ for i in range(ori_len):
 word_set_list = [word_set[0:600] for word_set in word_set_list]
 
 # 将单词列表转化为词向量
-word_gather_vec = fet.wordGatherList_to_Matrix(nlp,word_set_list,is_flat=True)
+word_gather_vec = fet.wordSet_to_Matrix(nlp,word_set_list,is_flat=True)
 
 print("词向量转换完成")
 

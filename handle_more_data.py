@@ -102,23 +102,23 @@ from tool import classification_tool as ct
 #                                     统计段首                                      #
 ####################################################################################
 
-info_list = []
+# info_list = []
 
-label_list.extend(fet.read_csv_context(
-                                filename="./data/"+dfl.dataFeatureList[8]["fileName"],
-                                row_range = dfl.dataFeatureList[8]["range"],
-                                col = 2))
+# label_list.extend(fet.read_csv_context(
+#                                 filename="./data/"+dfl.dataFeatureList[8]["fileName"],
+#                                 row_range = dfl.dataFeatureList[8]["range"],
+#                                 col = 2))
 
-oldlabel:str = ''
-oldcnt:int=0
-idx:int=0
-for label in label_list:
-    if label != oldlabel:
-        info_list.append({'label':oldlabel,'count':oldcnt,'start':idx-oldcnt,'end':idx})
-        oldcnt=0
-        oldlabel=label
-    oldcnt+=1
-    idx+=1
+# oldlabel:str = ''
+# oldcnt:int=0
+# idx:int=0
+# for label in label_list:
+#     if label != oldlabel:
+#         info_list.append({'label':oldlabel,'count':oldcnt,'start':idx-oldcnt,'end':idx})
+#         oldcnt=0
+#         oldlabel=label
+#     oldcnt+=1
+#     idx+=1
 
 pass
 

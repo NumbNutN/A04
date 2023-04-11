@@ -31,24 +31,24 @@ from tool import classification_tool as ct
 for i in [0,1,2]:
     text_list.extend(fet.read_csv_context(
                                 filename="./data/"+dfl.dataFeatureList[i]["fileName"],
-                                row_range = dfl.dataFeatureList[i]["range"][0:200],
+                                row_range = dfl.dataFeatureList[i]["range"][0:20],
                                 col = 1))
     
     # 由于kears要求使用数字作为标签
     label_list.extend(ct.get_label_from_csv(
                                 filename="./data/"+dfl.dataFeatureList[i]["fileName"],
-                                row_range =dfl.dataFeatureList[i]["range"][0:200]
+                                row_range =dfl.dataFeatureList[i]["range"][0:20]
                                 ))
 for i in [10,12,15]:
     text_list.extend(fet.read_csv_context(
                                 filename="./data/"+dfl.dataFeatureList[i]["fileName"],
-                                row_range = dfl.dataFeatureList[i]["range"][0:200],
+                                row_range = dfl.dataFeatureList[i]["range"][0:20],
                                 col = 1
                                 ))
     
     label_list.extend(fet.read_csv_context(
                                 filename="./data/"+dfl.dataFeatureList[i]["fileName"],
-                                row_range =dfl.dataFeatureList[i]["range"][0:200],
+                                row_range =dfl.dataFeatureList[i]["range"][0:20],
                                 col = 2
                                 ))
 
@@ -73,19 +73,19 @@ for i in range(len(split_text_list)):
 #[["dog", "cat", "fish", "row2"], ["col2","dog", "cat", "cat", "row3", "col2"],["fish", "bird", "row4", "col2"]]
 '''
 
-word_set_list = fet.split_word_single_arr(nlp,text_list)
+word_set_list = fet.split_to_word_set_from_sentence(nlp,text_list)
 print("分词完成")
 
 #去除停用词
 from spacy.lang.zh.stop_words import STOP_WORDS
 
-fet.text_list_throw_stop_word(word_set_list,list(STOP_WORDS))
+fet.word_set_throw_stop_word(word_set_list,list(STOP_WORDS))
 print("去除停用词完成")
 
 
 #去除600词以下并归一化为600词
 #2023-3-19 for in range 有坑，对i的改动是不会影响下一次循环的
-word_set_list, label_list = fet.normalization_word_number(word_set_list,label_list,600)
+word_set_list, label_list = fet.normalization_word_number(word_set_list,label_list,200)
 print("归一化完成")
 
 
@@ -95,7 +95,7 @@ label_list:np.ndarray = fet.list_2_ndarray(label_list)
 import time
 start_word2vec = time.time()
 # 将单词列表转化为词向量
-word_gather_vec = fet.wordGatherList_to_Matrix(nlp,word_set_list,is_flat=False)
+word_gather_vec = fet.wordSet_to_Matrix(nlp,word_set_list,is_flat=False)
 end_word2vec = time.time()
 print("词向量转换完成")
 print("词向量转换用时%d" %(end_word2vec-start_word2vec))
@@ -135,7 +135,7 @@ from keras.models import Sequential
 from keras.layers import Conv1D, MaxPooling1D, Flatten, Dense
 
 # 定义数据的输入形状
-input_shape = (600, 300)
+input_shape = (200, 300)
 
 # 定义数据分类的类的数量
 num_classes = 12
@@ -165,7 +165,7 @@ model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=
 model.fit(x_train, y_train, epochs=11, validation_data=(x_test, y_test))
 
 #保存模型
-model.save("./model_6_200_0405")
+model.save("./model/model_6_20_200_0411")
 
 
 # 对测试集预测得到预测结果

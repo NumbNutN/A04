@@ -56,21 +56,21 @@ label_list = []
 for i in range(0,3):
     text_list.extend(fet.read_csv_context(
                                 filename="./data/"+dfl.dataFeatureList[i]["fileName"],
-                                row_range = dfl.dataFeatureList[i]["range"][0:180],
+                                row_range = dfl.dataFeatureList[i]["range"][0:20],
                                 col = 1))
     label_list.extend(fet.read_csv_context(
                                 filename="./data/"+dfl.dataFeatureList[i]["fileName"],
-                                row_range =dfl.dataFeatureList[i]["range"][0:180],
+                                row_range =dfl.dataFeatureList[i]["range"][0:20],
                                 col = 2))
     
 for i in range(3,4):
     text_list.extend(fet.read_xlsx_context(
                                 filename="./data/"+dfl.dataFeatureList[i]["fileName"],
-                                row_range = dfl.dataFeatureList[i]["range"][0:180],
+                                row_range = dfl.dataFeatureList[i]["range"][0:20],
                                 col = 1))
     label_list.extend(fet.read_xlsx_context(
                                 filename="./data/"+dfl.dataFeatureList[i]["fileName"],
-                                row_range =dfl.dataFeatureList[i]["range"][0:180],
+                                row_range =dfl.dataFeatureList[i]["range"][0:20],
                                 col = 2))
 
 # # 从csv表格中读取第2-4行的文本数据
@@ -90,10 +90,10 @@ print("标签获取完成", flush=True)
 
 
 # 加载分词工具
-nlp = spacy.load('zh_core_web_sm')
+nlp = spacy.load('zh_core_web_md')
 
 # 对文本进行分词
-word_list = fet.split_word_arr(nlp,text_list)
+word_list = fet.split_word_from_sentence_array(nlp,text_list)
 # ["dog cat fish row2 col2","dog cat cat row3 col2","fish bird row4 col2"]
 print("分词完成", flush=True)
 

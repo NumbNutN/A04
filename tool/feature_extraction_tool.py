@@ -212,7 +212,7 @@ def split_word_sentence_to_split_word_list(sentence:str) -> list:
     return sentence.split(' ')
 
 
-def split_word_arr(nlp:spacy.Language,sentence_arr:list,split_word:str = ' ') -> list:
+def split_word_from_sentence_array(nlp:spacy.Language,sentence_arr:list,split_word:str = ' ') -> list:
     """将一个句子以split_word为间隔进行分词
 
     Args:
@@ -229,7 +229,8 @@ def split_word_arr(nlp:spacy.Language,sentence_arr:list,split_word:str = ' ') ->
 
     Info:
         Created by LGD on 2023-3-9
-        Last update on 2023-3-9
+        2023-4-10 调整了函数命名
+        Last update on 2023-4-10
     """
     sentence_list = []
     for sentence in sentence_arr:
@@ -239,8 +240,8 @@ def split_word_arr(nlp:spacy.Language,sentence_arr:list,split_word:str = ' ') ->
         
     return sentence_list
 
-def split_word_single_arr(nlp:spacy.Language,sentence_arr:list,throwStopWord:bool = False) -> list:
-    """将一个句子以单词为单位分割为单词的列表
+def split_to_word_set_from_sentence(nlp:spacy.Language,sentence:'str|list',throwStopWord:bool = False) -> 'list[list[str]]|list[str]':
+    """将一个句子列表以单词为单位分割为单词的列表
 
     Args:
         nlp (spacy.Language): spacy Language模型
@@ -255,17 +256,23 @@ def split_word_single_arr(nlp:spacy.Language,sentence_arr:list,throwStopWord:boo
 
     Info:
         Created by LGD on 2023-3-16
-        Last update on 2023-3-16
+        2023-4-10 调整了函数命名和函数的参数类型提示
+        Last update on 2023-4-10
+        
     """
-    word_gather_list = []
-    for sentence in sentence_arr:
+    if(type(sentence) == list):
+        word_gather_list = []
+        for sentence in sentence:
+            words = nlp(sentence)
+            word_gather_list.append([str(word) for word in words])
+        return word_gather_list
+    elif(type(sentence) == str):
         words = nlp(sentence)
-        word_gather_list.append([str(word) for word in words])
-    
-    return word_gather_list
+        word_gather = [str(word) for word in words]
+        return word_gather
 
 
-def normalization_word_number(wordSetList:list,labelList:list,number:int) ->list:
+def normalization_word_number(wordSet:'list[list[str]]|list[str]',labelList:list = [],number:int=0) ->list:
     """归一化单词数量，当数量小于number时会被剔除，大于number时会归一到number的数量
 
     Args:
@@ -278,21 +285,30 @@ def normalization_word_number(wordSetList:list,labelList:list,number:int) ->list
     Info:
         Created by LGD on 2023-3-19
     """
-    i:int = 0
-    cnt:int = 0
-    ori_len:int = len(wordSetList)
-    while i < ori_len - cnt:
-        if len(wordSetList[i]) < number:
-            wordSetList.pop(i)
-            labelList.pop(i)
-            cnt += 1
-            i -= 1
-        i+=1
+    if(type(wordSet[0]) == list):
+        i:int = 0
+        cnt:int = 0
+        ori_len:int = len(wordSet)
+        while i < ori_len - cnt:
+            if len(wordSet[i]) < number:
+                wordSet.pop(i)
+                if(len(labelList)!=0):
+                    labelList.pop(i)
+                cnt += 1
+                i -= 1
+            i+=1
 
-    wordSetList = [word_set[0:600] for word_set in wordSetList]
-    return wordSetList,labelList
+        wordSet = [word_set[0:number] for word_set in wordSet]
+        return wordSet,labelList
+    
+    elif(type(wordSet[0]) == str):
+        if(len(wordSet) < number):
+            return []
+        else:
+            return wordSet[0:number] 
+        
 
-def text_list_throw_stop_word(word_gather_list:list,stopWord:list) ->list:
+def word_set_throw_stop_word(wordSet:'list[str]|list[list[str]]',stopWord:list) ->'list[list[str]]|list[str]':
     """依据停用词列表去除停用词
 
     Args:
@@ -305,13 +321,20 @@ def text_list_throw_stop_word(word_gather_list:list,stopWord:list) ->list:
     Example:
         func([['天气','好'],['你','好']],['好'])
         return:[['天气'],['你']]
-    """
-    new_word_gather_list = []
-    for word_gather in word_gather_list:
-        new_word_gather = [word for word in word_gather if word not in stopWord]
-        new_word_gather_list.append(new_word_gather)
 
-    return new_word_gather_list
+    Info:
+        2023-4-10 调整了函数命名和函数的参数类型提示
+        last update on 2023-4-10
+    """
+    if(type(wordSet[0]) == list):
+        new_word_gather_list = []
+        for word_gather in wordSet:
+            new_word_gather = [word for word in word_gather if word not in stopWord]
+            new_word_gather_list.append(new_word_gather)
+        return new_word_gather_list
+    elif(type(wordSet[0]) == str):
+        new_word_gather = [word for word in wordSet if word not in stopWord]
+        return new_word_gather
 
 
 
@@ -352,7 +375,7 @@ def wordGatherList_to_VectorList(nlp:spacy.Language,wordGatherList:list,is_flat:
 
     return new_embedding_list
 
-def wordGatherList_to_Matrix(nlp:spacy.Language,wordGatherList:list,is_flat:bool=False) -> np.ndarray:
+def wordSet_to_Matrix(nlp:spacy.Language,wordSet:'list[list[str]]|list[str]',is_flat:bool=False) -> np.ndarray:
     """将单词集合的列表转换为词向量拼接的二维矩阵
         注意，由于python列表的元素长度可以任意，
             但二维ndarray的列数不可以，要求wordGather的长度必须归一化
@@ -373,19 +396,30 @@ def wordGatherList_to_Matrix(nlp:spacy.Language,wordGatherList:list,is_flat:bool
         Last update on 2023-3-15
 
     Update:
+        2023-4-10 调整了函数命名和函数的参数类型提示
         2023-3-16 将输出结果由词向量的扁平拼接改为（单词数,300)的矩阵
+        Last update on 2023-4-10
     """
-    embedding = []
-    for word_gather in wordGatherList:
-        for word in word_gather:
+    if(type(wordSet[0]) == list):
+        embedding = []
+        for word_gather in wordSet:
+            for word in word_gather:
+                embedding:np.ndarray = np.append(embedding,nlp.vocab[word].vector)
+
+        embedding:np.ndarray = embedding.reshape(len(wordSet),-1)
+
+        if(not is_flat):
+            embedding = embedding.reshape(len(wordSet),len(wordSet[0]),300)
+
+        return embedding
+    elif(type(wordSet[0]) == str):
+        embedding = []
+        for word in wordSet:
             embedding:np.ndarray = np.append(embedding,nlp.vocab[word].vector)
-
-    embedding:np.ndarray = embedding.reshape(len(wordGatherList),-1)
-
-    if(not is_flat):
-        embedding = embedding.reshape(len(wordGatherList),len(wordGatherList[0]),300)
-
-    return embedding
+        embedding:np.ndarray = embedding.reshape(len(wordSet),-1)
+        if(not is_flat):
+            embedding = embedding.reshape(1,len(wordSet),300)
+        return embedding
 
 
 def lower_dimension(array:np.ndarray) -> np.ndarray:

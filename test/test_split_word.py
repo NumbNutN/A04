@@ -15,7 +15,7 @@ text_list = fet.read_csv_context(filename,data_range)
 nlp = spacy.load('zh_core_web_md')
 
 # 对文本进行分词
-word_list = fet.split_word_arr(nlp,text_list)
+word_list = fet.split_word_from_sentence_array(nlp,text_list)
 
 lst:list = fet.split_word_sentence_to_split_word_list(word_list[0])
 

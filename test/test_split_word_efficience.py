@@ -17,7 +17,7 @@ nlp = spacy.load('zh_core_web_md')
 
 start_time = time.time()
 # 对文本进行分词
-word_list = fet.split_word_arr(nlp,text_list)
+word_list = fet.split_word_from_sentence_array(nlp,text_list)
 
 end_time = time.time()
 
