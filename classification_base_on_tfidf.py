@@ -5,6 +5,7 @@ import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 # 数据测试集切分
 from sklearn.model_selection import train_test_split
+import time
 ####################################################################################
 #                                     数据选择                                      #
 ####################################################################################
@@ -16,27 +17,29 @@ label_list = []
 # 3分类
 # 字符串标签转数字
 
+start = time.time()
+
 for i in [0,1,2]:
     text_list.extend(fet.read_csv_context(
                                 filename="./data/"+dfl.dataFeatureList[i]["fileName"],
-                                row_range = dfl.dataFeatureList[i]["range"][0:10],
+                                row_range = dfl.dataFeatureList[i]["range"][0:200],
                                 col = 1))
     
     # 由于kears要求使用数字作为标签
     label_list.extend(ct.get_label_from_csv(
                                 filename="./data/"+dfl.dataFeatureList[i]["fileName"],
-                                row_range =dfl.dataFeatureList[i]["range"][0:10]
+                                row_range =dfl.dataFeatureList[i]["range"][0:200]
                                 ))
 for i in [10,12,15]:
     text_list.extend(fet.read_csv_context(
                                 filename="./data/"+dfl.dataFeatureList[i]["fileName"],
-                                row_range = dfl.dataFeatureList[i]["range"][0:10],
+                                row_range = dfl.dataFeatureList[i]["range"][0:200],
                                 col = 1
                                 ))
     
     label_list.extend(fet.read_csv_context(
                                 filename="./data/"+dfl.dataFeatureList[i]["fileName"],
-                                row_range =dfl.dataFeatureList[i]["range"][0:10],
+                                row_range =dfl.dataFeatureList[i]["range"][0:200],
                                 col = 2
                                 ))
 
@@ -59,6 +62,9 @@ train_test_split(vectorizer,label_list,
                  test_size=0.2,random_state=0)
 print("切分完成", flush=True)
 
+end = time.time()
+
+print("特征工程用时%d\n" %(end-start))
 from keras.models import Sequential
 from keras.layers import Conv1D, MaxPooling1D, Flatten, Dense
 
