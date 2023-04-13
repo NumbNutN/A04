@@ -1,7 +1,10 @@
+/data/*
+!/data/more_haveContent0405.csv
+!/data/more_supplement2_seq_0413.csv
 /tool/__pycache__
 /driver/go-cqhttp_windows_386
 /script
 /media
 /destBin
-/data
+
 /commit_draft.txt

@@ -21,20 +21,20 @@ from tool import classification_tool as ct
 
 
 
-# text_list.extend(fet.read_csv_context(
-#                                 filename="./data/"+dfl.dataFeatureList[8]["fileName"],
-#                                 row_range = dfl.dataFeatureList[8]["range"],
-#                                 col = 0))
+text_list.extend(fet.read_csv_context(
+                                filename="./data/test.csv",
+                                row_range = range(20000),
+                                col = 0))
     
-# label_list.extend(fet.read_csv_context(
-#                                 filename="./data/"+dfl.dataFeatureList[8]["fileName"],
-#                                 row_range = dfl.dataFeatureList[8]["range"],
-#                                 col = 2))
+label_list.extend(fet.read_csv_context(
+                                filename="./data/test.csv",
+                                row_range = range(20000),
+                                col = 2))
 
-# content_list.extend(fet.read_csv_context(
-#                                 filename="./data/"+dfl.dataFeatureList[8]["fileName"],
-#                                 row_range = dfl.dataFeatureList[8]["range"],
-#                                 col = 1))
+content_list.extend(fet.read_csv_context(
+                                filename="./data/test.csv",
+                                row_range = range(20000),
+                                col = 1))
 
 
 
@@ -55,26 +55,26 @@ from tool import classification_tool as ct
 #                                     写入数据                                      #
 ####################################################################################
 
-# import pandas as pd
+import pandas as pd
 
-# idx:int = 0
-# for i in range(len(content_list)):
-#     if content_list[idx] == "Connect Failed" or content_list[idx] == "Nothing":
-#         text_list.pop(idx)
-#         label_list.pop(idx)
-#         content_list.pop(idx)
-#     else:
-#         idx+=1
+idx:int = 0
+for i in range(len(content_list)):
+    if content_list[idx] == "Connect Failed" or content_list[idx] == "Nothing":
+        text_list.pop(idx)
+        label_list.pop(idx)
+        content_list.pop(idx)
+    else:
+        idx+=1
 
-# data = {
-#     'url':text_list,
-#     'text':content_list,
-#     'label':[int(label) for label in label_list]
-# }
+data = {
+    'url':text_list,
+    'text':content_list,
+    'label':[int(label) for label in label_list]
+}
 
-# df = pd.DataFrame(data)
-# df = df.sort_values(by='label',ascending=True)
-# df.to_csv("./data/more_haveContent0405.csv",sep=',',mode='w',header=False,index=False,encoding='utf-8')
+df = pd.DataFrame(data)
+df = df.sort_values(by='label',ascending=True)
+df.to_csv("./data/test_0413.csv",sep=',',mode='w',header=False,index=False,encoding='utf-8')
 
 
 ####################################################################################
@@ -102,23 +102,23 @@ from tool import classification_tool as ct
 #                                     统计段首                                      #
 ####################################################################################
 
-# info_list = []
+info_list = []
 
-# label_list.extend(fet.read_csv_context(
-#                                 filename="./data/"+dfl.dataFeatureList[8]["fileName"],
-#                                 row_range = dfl.dataFeatureList[8]["range"],
-#                                 col = 2))
+label_list.extend(fet.read_csv_context(
+                                filename="./data/"+dfl.dataFeatureList[8]["fileName"],
+                                row_range = dfl.dataFeatureList[8]["range"],
+                                col = 2))
 
-# oldlabel:str = ''
-# oldcnt:int=0
-# idx:int=0
-# for label in label_list:
-#     if label != oldlabel:
-#         info_list.append({'label':oldlabel,'count':oldcnt,'start':idx-oldcnt,'end':idx})
-#         oldcnt=0
-#         oldlabel=label
-#     oldcnt+=1
-#     idx+=1
+oldlabel:str = ''
+oldcnt:int=0
+idx:int=0
+for label in label_list:
+    if label != oldlabel:
+        info_list.append({'label':oldlabel,'count':oldcnt,'start':idx-oldcnt,'end':idx})
+        oldcnt=0
+        oldlabel=label
+    oldcnt+=1
+    idx+=1
 
 pass
 
