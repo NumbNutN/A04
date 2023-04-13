@@ -307,7 +307,39 @@ def normalization_word_number(wordSet:'list[list[str]]|list[str]',labelList:list
         else:
             return wordSet[0:number] 
         
+def new_normalization_word_number(wordSet:'list[list[str]]|list[str]',labelList:list = [],specifiedWordNum:int=0,thresholdWordNum:int=0) ->list:
+    """归一化单词数量，当数量小于specifiedWordNum时会重复填充，大于specifiedWordNum时会归一到specifiedWordNum的数量
 
+    Args:
+        wordList (list): 需要归一化的单词集，为单词集合的列表
+        labelList (list):根据单词集的剔除情况
+        specifiedWordNum (int):归一化数量
+
+    Returns:
+        list: 归一化后的列表
+
+    Info:
+        Created by LGD on 2023-3-19
+    """
+    if(type(wordSet[0]) == list):
+        for i in range(len(wordSet)):
+            if len(wordSet[i]) < specifiedWordNum:
+                #将将不足的部分进行重复
+                while(len(wordSet[i]) < specifiedWordNum):
+                    wordSet[i].extend(wordSet[i][0:specifiedWordNum-len(wordSet)])
+            else:
+                wordSet[i] = wordSet[i][0:specifiedWordNum]
+
+        return wordSet,labelList
+    
+    elif(type(wordSet[0]) == str):
+        if(len(wordSet) < specifiedWordNum):
+            while(len(wordSet) < specifiedWordNum):
+                wordSet.extend(wordSet[0:specifiedWordNum-len(wordSet)])
+            return wordSet
+        else:
+            return wordSet[0:specifiedWordNum] 
+        
 def word_set_throw_stop_word(wordSet:'list[str]|list[list[str]]',stopWord:list) ->'list[list[str]]|list[str]':
     """依据停用词列表去除停用词
 

@@ -156,6 +156,8 @@ python -m spacy download zh_core_web_md
 pip install scikit-learn
 pip install keras
 pip install tensorflow
+
+pip install openpyxl
 ```
 
 
