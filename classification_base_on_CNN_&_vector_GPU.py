@@ -66,6 +66,20 @@ for i in [14,21]:
                             col = 2
                             ))
 
+
+for i in [0,1,2,3,4,7,8,9]:
+    text_list.extend(fet.read_csv_context(
+                                filename="./data/"+dfl.allDataFeatureList[i]["fileName"],
+                                row_range = dfl.allDataFeatureList[i]["range"][0:200],
+                                col = 1
+                                ))
+    
+    label_list.extend(fet.read_csv_context(
+                                filename="./data/"+dfl.allDataFeatureList[i]["fileName"],
+                                row_range =dfl.allDataFeatureList[i]["range"][0:200],
+                                col = 2
+                                ))
+
 # 字符串转为数字
 label_list = [int(label) for label in label_list]
 
@@ -96,6 +110,8 @@ from spacy.lang.zh.stop_words import STOP_WORDS
 fet.word_set_throw_stop_word(word_set_list,list(STOP_WORDS))
 print("去除停用词完成")
 
+#扩充数据集
+word_set_list, label_list = fet.expand_content(word_set_list,label_list,specifiedWordNum=200)
 
 #去除600词以下并归一化为600词
 #2023-3-19 for in range 有坑，对i的改动是不会影响下一次循环的

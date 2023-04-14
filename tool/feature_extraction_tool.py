@@ -72,6 +72,21 @@ class DataFeature:
         #{"fileName":"train1.csv","type":None,"range":range(0.200)}
     ]
 
+    allDataFeatureList:list = \
+    [                                                                                           #label   len     idx
+        {"fileName":"all_content.csv","type":"婚恋交友","range":range(2,33723)},                #2      33723   0
+        {"fileName":"all_content.csv","type":"假冒身份","range":range(33723,33872)},            #3      149     1
+        {"fileName":"all_content.csv","type":"钓鱼网站","range":range(33872,34342)},            #4      470     2
+        {"fileName":"all_content.csv","type":"冒充公检法","range":range(34342,34490)},          #5      148     3
+        {"fileName":"all_content.csv","type":"平台诈骗","range":range(34490,45005)},            #6      10515   4
+        {"fileName":"all_content.csv","type":"招聘兼职","range":range(45005,45056)},            #7      51      5
+        {"fileName":"all_content.csv","type":"杀猪盘","range":range(45056,45145)},              #8      89      6
+        {"fileName":"all_content.csv","type":"博彩赌博","range":range(45145,46479)},            #9      1334    7
+        {"fileName":"all_content.csv","type":"信贷理财","range":range(46479,50281)},            #10     3802    8
+        {"fileName":"all_content.csv","type":"刷单诈骗","range":range(50281,52125)},            #11     1844    9
+        {"fileName":"all_content.csv","type":"中奖诈骗","range":range(52125,52126)}             #12     1       10
+    ]
+
 
  
 def read_csv_context(filename:str,row_range:range,col:int = 1,decode:str='utf-8') -> list:
@@ -510,7 +525,22 @@ def get_similar_word(word:str) -> str:
         str: 最接近的单词
     """
 
-def expand_content(wordSet:'list[list[str]]|list[str]',labelList:list = [],specifiedWordNum:int=0,thresholdWordNum:int=0) ->list:
-    if(type(wordSet[i]) == list):
-        pass
+def expand_content(wordSet:'list[list[str]]|list[str]',labelList:list = [],specifiedWordNum:int=0) ->list:
+    if(type(wordSet[0]) == list):
+        i:int = 0
+        cnt:int = 0
+        ori_len:int = len(wordSet)
+        while i < ori_len + cnt:
+            while(len(wordSet[i]) >= 2*specifiedWordNum):
+                wordSet.insert(i,wordSet[i][0:specifiedWordNum])
+                labelList.insert(i,labelList[i])
+                i+=1
+                cnt+=1
+                wordSet[i] = wordSet[i][specifiedWordNum:]
+            i+=1
+        print("扩充了%d条数据" %(cnt))
+        for wordset in wordSet:
+            print(len(wordset))
+    return wordSet,labelList
+
 
