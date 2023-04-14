@@ -51,6 +51,20 @@ for i in [10,12,15]:
                                 row_range =dfl.dataFeatureList[i]["range"][0:20],
                                 col = 2
                                 ))
+    
+# 添加杀猪盘  冒充公检法
+for i in [14,21]:
+    text_list.extend(fet.read_csv_context(
+                            filename="./data/"+dfl.dataFeatureList[14]["fileName"],
+                            row_range = dfl.dataFeatureList[14]["range"][0:20],
+                            col = 1
+                            ))
+
+    label_list.extend(fet.read_csv_context(
+                            filename="./data/"+dfl.dataFeatureList[14]["fileName"],
+                            row_range =dfl.dataFeatureList[14]["range"][0:20],
+                            col = 2
+                            ))
 
 # 字符串转为数字
 label_list = [int(label) for label in label_list]
@@ -85,9 +99,10 @@ print("去除停用词完成")
 
 #去除600词以下并归一化为600词
 #2023-3-19 for in range 有坑，对i的改动是不会影响下一次循环的
-word_set_list, label_list = fet.normalization_word_number(word_set_list,label_list,200)
+word_set_list, label_list = fet.new_normalization_word_number(word_set_list,label_list,specifiedWordNum=200,thresholdWordNum=20)
 print("归一化完成")
-
+for word_set in word_set_list:
+    print(len(word_set))
 
 # 将数字列表转为ndarray
 label_list:np.ndarray = fet.list_2_ndarray(label_list)

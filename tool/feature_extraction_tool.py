@@ -314,13 +314,26 @@ def new_normalization_word_number(wordSet:'list[list[str]]|list[str]',labelList:
         Created by LGD on 2023-3-19
     """
     if(type(wordSet[0]) == list):
-        for i in range(len(wordSet)):
-            if len(wordSet[i]) < specifiedWordNum:
-                #将将不足的部分进行重复
+        i:int = 0
+        cnt:int = 0
+        ori_len:int = len(wordSet)
+        while i < ori_len - cnt:
+            if len(wordSet[i]) < specifiedWordNum and len(wordSet[i]) > thresholdWordNum:
+                #将不足的部分进行重复
                 while(len(wordSet[i]) < specifiedWordNum):
-                    wordSet[i].extend(wordSet[i][0:specifiedWordNum-len(wordSet)])
-            else:
+                    wordSet[i].extend(wordSet[i][0:specifiedWordNum-len(wordSet[i])])
+            elif len(wordSet[i]) >= specifiedWordNum:
                 wordSet[i] = wordSet[i][0:specifiedWordNum]
+            else:
+                wordSet.pop(i)
+                if(len(labelList)!=0):
+                    labelList.pop(i)
+                cnt += 1
+                i -= 1
+            print("上一次数量",len(wordSet[i]))
+            if(len(wordSet[i])!= specifiedWordNum):
+                pass
+            i+=1
 
         return wordSet,labelList
     
@@ -330,7 +343,9 @@ def new_normalization_word_number(wordSet:'list[list[str]]|list[str]',labelList:
                 wordSet.extend(wordSet[0:specifiedWordNum-len(wordSet)])
             return wordSet
         else:
-            return wordSet[0:specifiedWordNum] 
+            return wordSet[0:specifiedWordNum]
+        
+
         
 def word_set_throw_stop_word(wordSet:'list[str]|list[list[str]]',stopWord:list) ->'list[list[str]]|list[str]':
     """依据停用词列表去除停用词
@@ -483,4 +498,19 @@ def count_word_freq(word_gather:list) -> dict:
         Last update on 2023-3-16
     """
     pass
+
+
+def get_similar_word(word:str) -> str:
+    """获取最接近的单词
+
+    Args:
+        word (str): 待评估单词
+
+    Returns:
+        str: 最接近的单词
+    """
+
+def expand_content(wordSet:'list[list[str]]|list[str]',labelList:list = [],specifiedWordNum:int=0,thresholdWordNum:int=0) ->list:
+    if(type(wordSet[i]) == list):
+        pass
 
