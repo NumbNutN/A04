@@ -20,12 +20,12 @@ csv.field_size_limit(20000*6000)
 
 ori_url_list.extend(fet.read_csv_context(
                                 filename="./final/data/test_with_text_0416.csv",
-                                row_range = range(0,10),
+                                row_range = range(0,100000),
                                 col = 0))
 
 ori_text_list.extend(fet.read_csv_context(
                                 filename="./final/data/test_with_text_0416.csv",
-                                row_range = range(0,10),
+                                row_range = range(0,100000),
                                 col = 1))
 
 text_list = copy.deepcopy(ori_text_list)
@@ -114,4 +114,4 @@ for batch_range in batch_list:
 
     df = pd.DataFrame(data)
     #df = df.sort_values(by='label',ascending=True)
-    df.to_csv("./final/data/test_with_text_pred_0416.csv",sep=',',mode='a',header=False,index=False,encoding='utf-8')
+    df.to_csv("./final/data/test_with_text_pred_0417.csv",sep=',',mode='a',header=False,index=False,encoding='utf-8')
