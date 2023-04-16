@@ -543,4 +543,25 @@ def expand_content(wordSet:'list[list[str]]|list[str]',labelList:list = [],speci
             print(len(wordset))
     return wordSet,labelList
 
+def label_reflect2class(label_list:'list[int]',n_class:int) -> 'list[int]':
+    """将标签映射为[0-n_class-1]间的连续标签
 
+    Args:
+        label_list (list[int]): _description_
+        n_class (int): _description_
+
+    Returns:
+        list[int]: _description_
+    """
+    reflect_label_dict = {}
+    cnt:int = 0
+    for label in label_list:
+        if label not in reflect_label_dict:
+            reflect_label_dict[label] = cnt
+            cnt += 1
+            if cnt > n_class:
+                return []
+    
+    # 映射表创建完成
+    new_label_list = [reflect_label_dict[label] for label in label_list]
+    return new_label_list
