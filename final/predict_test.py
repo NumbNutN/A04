@@ -12,33 +12,33 @@ dfl = fet.DataFeature()
 
 spacy.prefer_gpu()
 
-ori_url_list = []
-ori_text_list = []
+url_list = []
+text_list = []
 
 csv.field_size_limit(20000*6000)
 
 
-ori_url_list.extend(fet.read_csv_context(
-                                filename="./final/data/test_with_text_0416.csv",
-                                row_range = range(0,100000),
+url_list.extend(fet.read_csv_context(
+                                filename="./final/data/test_with_text_content.csv",
+                                row_range = range(1500,4552),
                                 col = 0))
 
-ori_text_list.extend(fet.read_csv_context(
-                                filename="./final/data/test_with_text_0416.csv",
-                                row_range = range(0,100000),
+text_list.extend(fet.read_csv_context(
+                                filename="./final/data/test_with_text_content.csv",
+                                row_range = range(1500,4552),
                                 col = 1))
 
-text_list = copy.deepcopy(ori_text_list)
-url_list = copy.deepcopy(ori_url_list)
+# text_list = copy.deepcopy(ori_text_list)
+# url_list = copy.deepcopy(ori_url_list)
 
 
-idx:int = 0
-for i in range(len(text_list)):
-    if text_list[idx] == "Connect Failed" or text_list[idx] == "Nothing":
-        url_list.pop(idx)
-        text_list.pop(idx)
-    else:
-        idx+=1
+# idx:int = 0
+# for i in range(len(text_list)):
+#     if text_list[idx] == "Connect Failed" or text_list[idx] == "Nothing":
+#         url_list.pop(idx)
+#         text_list.pop(idx)
+#     else:
+#         idx+=1
 
 # 加载分词工具
 nlp = spacy.load('zh_core_web_md')
@@ -52,7 +52,7 @@ batch_list = [range(0,500),
               range(2500,3000),
               range(3000,3500),
               range(3500,4000),
-              range(4000,4551)]
+              range(4000,4552)]
 
 word_set_list = fet.split_to_word_set_from_sentence(nlp,text_list)
 print("分词完成")
@@ -77,11 +77,11 @@ for batch_range in batch_list:
 
     #去除600词以下并归一化为600词
     #2023-3-19 for in range 有坑，对i的改动是不会影响下一次循环的
-    split_word_set_list, label_list = fet.new_normalization_word_number(split_word_set_list,specifiedWordNum=200,thresholdWordNum=0)
+    new_split_word_set_list, split_url_list = fet.new_normalization_word_number(split_word_set_list,labelList = split_url_list,specifiedWordNum=200,thresholdWordNum=0)
     print("归一化完成")
 
     # 将单词列表转化为词向量
-    word_gather_vec = fet.wordSet_to_Matrix(nlp,split_word_set_list,is_flat=False)
+    word_gather_vec = fet.wordSet_to_Matrix(nlp,new_split_word_set_list,is_flat=False)
     print("词向量转换完成")
 
     import cupy
@@ -119,4 +119,4 @@ for batch_range in batch_list:
 
     df = pd.DataFrame(data)
     #df = df.sort_values(by='label',ascending=True)
-    df.to_csv("./final/data/test_with_text_pred_0417.csv",sep=',',mode='a',header=False,index=False,encoding='utf-8')
+    df.to_csv("./final/data/test_with_text_pred_0417_new.csv",sep=',',mode='a',header=False,index=False,encoding='utf-8')
