@@ -28,56 +28,18 @@ label_list = []
 # 字符串标签转数字
 from tool import classification_tool as ct
 
-# for i in [0,1,2]:
-#     text_list.extend(fet.read_csv_context(
-#                                 filename="./data/"+dfl.dataFeatureList[i]["fileName"],
-#                                 row_range = dfl.dataFeatureList[i]["range"][0:20],
-#                                 col = 1))
-    
-#     # 由于kears要求使用数字作为标签
-#     label_list.extend(ct.get_label_from_csv(
-#                                 filename="./data/"+dfl.dataFeatureList[i]["fileName"],
-#                                 row_range =dfl.dataFeatureList[i]["range"][0:20]
-#                                 ))
-
-# for i in [10,12,15]:
-#     text_list.extend(fet.read_csv_context(
-#                                 filename="./data/"+dfl.dataFeatureList[i]["fileName"],
-#                                 row_range = dfl.dataFeatureList[i]["range"][0:20],
-#                                 col = 1
-#                                 ))
-    
-#     label_list.extend(fet.read_csv_context(
-#                                 filename="./data/"+dfl.dataFeatureList[i]["fileName"],
-#                                 row_range =dfl.dataFeatureList[i]["range"][0:20],
-#                                 col = 2
-#                                 ))
-    
-# # 添加杀猪盘  冒充公检法
-# for i in [14,21]:
-#     text_list.extend(fet.read_csv_context(
-#                             filename="./data/"+dfl.dataFeatureList[14]["fileName"],
-#                             row_range = dfl.dataFeatureList[14]["range"][0:20],
-#                             col = 1
-#                             ))
-
-#     label_list.extend(fet.read_csv_context(
-#                             filename="./data/"+dfl.dataFeatureList[14]["fileName"],
-#                             row_range =dfl.dataFeatureList[14]["range"][0:20],
-#                             col = 2
-#                             ))
 
 
 for i in [0,1,2,3,4,5,6,7,8,9]:
     text_list.extend(fet.read_csv_context(
                                 filename="./data/"+dfl.allDataFeatureList[i]["fileName"],
-                                row_range = dfl.allDataFeatureList[i]["range"][0:20],
+                                row_range = dfl.allDataFeatureList[i]["range"][0:200],
                                 col = 0
                                 ))
     
     label_list.extend(fet.read_csv_context(
                                 filename="./data/"+dfl.allDataFeatureList[i]["fileName"],
-                                row_range =dfl.allDataFeatureList[i]["range"][0:20],
+                                row_range =dfl.allDataFeatureList[i]["range"][0:200],
                                 col = 1
                                 ))
 
@@ -203,7 +165,7 @@ model.compile(loss='sparse_categorical_crossentropy', optimizer='adam',metrics=[
 model.fit(x_train, y_train, epochs=10, validation_data=(x_test, y_test))
 
 #保存模型
-#model.save("./model/model_8_200_200_0415")
+model.save("./model/model_10_200_200_0416")
 
 
 # 对测试集预测得到预测结果
@@ -312,8 +274,8 @@ plt.xlabel('False Positive Rate')
 plt.ylabel('True Positive Rate')
 plt.title('multi-calss ROC')
 plt.legend(loc="lower right")
-plt.show()
-
+#plt.show()
+plt.savefig('figs/auc.png')
 
 # 计算pr
 
@@ -373,8 +335,8 @@ ax.set_ylim([0.0, 1.05])
 ax.legend(handles=handles, labels=labels, loc="best")
 ax.set_title("Extension of Precision-Recall curve to multi-class")
 
-plt.show()
-
+#plt.show()
+plt.savefig('figs/pr.png')
 
 
 
