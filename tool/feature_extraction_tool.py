@@ -454,12 +454,14 @@ def wordSet_to_Matrix(nlp:spacy.Language,wordSet:'list[list[str]]|list[str]',is_
         2023-3-16 将输出结果由词向量的扁平拼接改为（单词数,300)的矩阵
         Last update on 2023-4-10
     """
+    cnt = 0
     if(type(wordSet[0]) == list):
         embedding = []
         for word_gather in wordSet:
             for word in word_gather:
                 embedding:np.ndarray = np.append(embedding,nlp.vocab[word].vector)
-
+            print("转换文本%d" %(cnt))
+            cnt += 1
         embedding:np.ndarray = embedding.reshape(len(wordSet),-1)
 
         if(not is_flat):
