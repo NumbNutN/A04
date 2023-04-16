@@ -34,13 +34,13 @@ from tool import classification_tool as ct
 for i in [0,1,2,3,4,5,6,7,8,9]:
     text_list.extend(fet.read_csv_context(
                                 filename="./data/"+dfl.allDataFeatureList[i]["fileName"],
-                                row_range = dfl.allDataFeatureList[i]["range"][0:10],
+                                row_range = dfl.allDataFeatureList[i]["range"][0:200],
                                 col = 0
                                 ))
     
     label_list.extend(fet.read_csv_context(
                                 filename="./data/"+dfl.allDataFeatureList[i]["fileName"],
-                                row_range =dfl.allDataFeatureList[i]["range"][0:10],
+                                row_range =dfl.allDataFeatureList[i]["range"][0:200],
                                 col = 1
                                 ))
 
@@ -169,7 +169,7 @@ model.fit(x_train, y_train, epochs=10, validation_data=(x_test, y_test))
 #model.save("./model/model_10_200_200_0416")
 
 import tensorflow as tf
-tf.keras.models.save_model(model,"./model/model_10_10_200_tf_0416")
+tf.keras.models.save_model(model,"./model/model_10_200_200_tf_0416")
 # 对测试集预测得到预测结果
 y_pred = model.predict(x_test)
 
@@ -196,16 +196,16 @@ scores = model.evaluate(x_test,y_test)
 ###################################
 #          保存pred                #
 ##################################
-# file_path = './final/label_and_pred.txt'
-# with open(file_path,mode='w',encoding='utf-8') as file_obj:
-#     file_obj.write("label\tpred\n")
-#     idx:int = 0
-#     while(idx < len(y_test)):
-#         file_obj.write("%d\t" %(y_test[idx]))
-#         for pred in y_pred[idx]:
-#             file_obj.write("%f\t" %(pred))
-#         file_obj.write("\n")
-#         idx+=1
+file_path = './final/label_and_pred_04161419.txt'
+with open(file_path,mode='w',encoding='utf-8') as file_obj:
+    file_obj.write("label\tpred\n")
+    idx:int = 0
+    while(idx < len(y_test)):
+        file_obj.write("%d\t" %(y_test[idx]))
+        for pred in y_pred[idx]:
+            file_obj.write("%f\t" %(pred))
+        file_obj.write("\n")
+        idx+=1
     
 ###################################
 #          AUX绘图                #

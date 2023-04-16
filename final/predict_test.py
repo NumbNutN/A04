@@ -17,12 +17,12 @@ csv.field_size_limit(20000*6000)
 
 ori_url_list.extend(fet.read_csv_context(
                                 filename="./final/data/test_with_text_0416.csv",
-                                row_range = range(20),
+                                row_range = range(20000),
                                 col = 0))
 
 ori_text_list.extend(fet.read_csv_context(
                                 filename="./final/data/test_with_text_0416.csv",
-                                row_range = range(20),
+                                row_range = range(20000),
                                 col = 1))
 
 text_list = copy.deepcopy(ori_text_list)
@@ -73,7 +73,7 @@ from keras.models import Sequential
 
 import keras
 import tensorflow as tf
-model:Sequential = tf.keras.models.load_model("./model/model_10_10_200_tf_0416")
+model:Sequential = tf.keras.models.load_model("./model/model_10_200_200_tf_0416")
 
 # 对测试集预测得到预测结果
 y_pred = model.predict(word_gather_vec)

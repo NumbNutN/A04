@@ -26,10 +26,10 @@ text_list.extend(fet.read_csv_context(
                                 row_range = range(30000),
                                 col = 0))
     
-label_list.extend(fet.read_csv_context(
-                                filename="./data/more_supplement2_seq_0413.csv",
-                                row_range = range(30000),
-                                col = 2))
+# label_list.extend(fet.read_csv_context(
+#                                 filename="./data/more_supplement2_seq_0413.csv",
+#                                 row_range = range(30000),
+#                                 col = 2))
 
 content_list.extend(fet.read_csv_context(
                                 filename="./data/more_supplement2_seq_0413.csv",
@@ -61,7 +61,7 @@ idx:int = 0
 for i in range(len(content_list)):
     if content_list[idx] == "Connect Failed" or content_list[idx] == "Nothing":
         text_list.pop(idx)
-        label_list.pop(idx)
+        # label_list.pop(idx)
         content_list.pop(idx)
     else:
         idx+=1
@@ -69,12 +69,12 @@ for i in range(len(content_list)):
 data = {
     'url':text_list,
     'text':content_list,
-    'label':[int(label) for label in label_list]
+    # 'label':[int(label) for label in label_list]
 }
 
-df = pd.DataFrame(data)
-df = df.sort_values(by='label',ascending=True)
-df.to_csv("./data/test_0413.csv",sep=',',mode='w',header=False,index=False,encoding='utf-8')
+# df = pd.DataFrame(data)
+# df = df.sort_values(by='label',ascending=True)
+# df.to_csv("./data/test_0413.csv",sep=',',mode='w',header=False,index=False,encoding='utf-8')
 
 
 ####################################################################################
@@ -82,20 +82,20 @@ df.to_csv("./data/test_0413.csv",sep=',',mode='w',header=False,index=False,encod
 ####################################################################################
 
 # 统计一些数据
-# cnt_cntfail = 0
-# cnt =0
-# cnt_nothing = 0
-# for i in range(len(content_list)):
-#     if content_list[i] != "Connect Failed" and content_list[i] != "Nothing":
-#         cnt+=1
-#     if content_list[i] == "Connect Failed":
-#         cnt_cntfail+=1
-#     if content_list[i] =="Nothing":
-#         cnt_nothing+=1
+cnt_cntfail = 0
+cnt =0
+cnt_nothing = 0
+for i in range(len(content_list)):
+    if content_list[i] != "Connect Failed" and content_list[i] != "Nothing":
+        cnt+=1
+    if content_list[i] == "Connect Failed":
+        cnt_cntfail+=1
+    if content_list[i] =="Nothing":
+        cnt_nothing+=1
 
-# print("有文本的比例：%f" %(cnt / len(content_list)))
-# print("Connect Failed比例：%f" %(cnt_cntfail / len(content_list)))
-# print("Nothing比例：%f" %(cnt_nothing / len(content_list)))
+print("有文本的比例：%f" %(cnt / len(content_list)))
+print("Connect Failed比例：%f" %(cnt_cntfail / len(content_list)))
+print("Nothing比例：%f" %(cnt_nothing / len(content_list)))
 
 
 ####################################################################################
@@ -104,23 +104,23 @@ df.to_csv("./data/test_0413.csv",sep=',',mode='w',header=False,index=False,encod
 
 
 
-label_list.extend(fet.read_csv_context(
-                                filename="./data/"+dfl.dataFeatureList[8]["fileName"],
-                                row_range = dfl.dataFeatureList[8]["range"],
-                                col = 2))
+# label_list.extend(fet.read_csv_context(
+#                                 filename="./data/"+dfl.dataFeatureList[8]["fileName"],
+#                                 row_range = dfl.dataFeatureList[8]["range"],
+#                                 col = 2))
 
-info_list = []
+# info_list = []
 
-oldlabel:str = ''
-oldcnt:int=0
-idx:int=0
-for label in label_list:
-    if label != oldlabel:
-        info_list.append({'label':oldlabel,'count':oldcnt,'start':idx-oldcnt,'end':idx})
-        oldcnt=0
-        oldlabel=label
-    oldcnt+=1
-    idx+=1
+# oldlabel:str = ''
+# oldcnt:int=0
+# idx:int=0
+# for label in label_list:
+#     if label != oldlabel:
+#         info_list.append({'label':oldlabel,'count':oldcnt,'start':idx-oldcnt,'end':idx})
+#         oldcnt=0
+#         oldlabel=label
+#     oldcnt+=1
+#     idx+=1
 
 
 pass

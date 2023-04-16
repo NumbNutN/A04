@@ -127,7 +127,9 @@ plt.savefig('./final/figs/auc.png')
 #plt.show()
 
 
-
+###################################
+#          PR绘图                #
+##################################
 
 from sklearn.metrics import PrecisionRecallDisplay,precision_recall_curve,average_precision_score
 import matplotlib.pyplot as plt
