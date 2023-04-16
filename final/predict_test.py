@@ -70,6 +70,11 @@ for batch_range in batch_list:
         if idx < len(word_set_list):
             split_word_set_list.append(word_set_list[idx])
 
+    split_url_list = []
+    for idx in batch_range:
+        if idx < len(url_list):
+            split_url_list.append(url_list[idx])
+
     #去除600词以下并归一化为600词
     #2023-3-19 for in range 有坑，对i的改动是不会影响下一次循环的
     split_word_set_list, label_list = fet.new_normalization_word_number(split_word_set_list,specifiedWordNum=200,thresholdWordNum=0)
@@ -108,7 +113,7 @@ for batch_range in batch_list:
 
     import pandas as pd
     data = {
-        'url':url_list,
+        'url':split_url_list,
         'label':[int(label) for label in label_list]
     }
 
