@@ -1,10 +1,12 @@
+import sys
+sys.path.append(".")
 
 from tool import feature_extraction_tool as fet
 from tool import classification_tool as ct
 import spacy
 import numpy as np
 import csv
-
+csv.field_size_limit(20000*6000*10)
 ####################################################################################
 #                                     数据选择                                      #
 ####################################################################################
@@ -22,18 +24,18 @@ from tool import classification_tool as ct
 
 
 text_list.extend(fet.read_csv_context(
-                                filename="./data/more_supplement2_seq_0413.csv",
-                                row_range = range(30000),
+                                filename="./data/test.csv",
+                                row_range = range(3000000),
                                 col = 0))
     
 # label_list.extend(fet.read_csv_context(
-#                                 filename="./data/more_supplement2_seq_0413.csv",
+#                                 filename="./data/test.csv",
 #                                 row_range = range(30000),
 #                                 col = 2))
 
 content_list.extend(fet.read_csv_context(
-                                filename="./data/more_supplement2_seq_0413.csv",
-                                row_range = range(30000),
+                                filename="./data/test.csv",
+                                row_range = range(3000000),
                                 col = 1))
 
 
@@ -55,7 +57,8 @@ content_list.extend(fet.read_csv_context(
 #                                     写入数据                                      #
 ####################################################################################
 
-import pandas as pd
+# import pandas as pd
+
 
 idx:int = 0
 for i in range(len(content_list)):
@@ -81,6 +84,8 @@ data = {
 #                                     数据统计                                      #
 ####################################################################################
 
+
+
 # 统计一些数据
 cnt_cntfail = 0
 cnt =0
@@ -93,6 +98,10 @@ for i in range(len(content_list)):
     if content_list[i] =="Nothing":
         cnt_nothing+=1
 
+print("网址总数 %d" %(len(content_list)))
+print("有文本的数量 %d" %(cnt))
+print("Connect Failed数量 %d" %(cnt_cntfail))
+print("Nothing数量 %d" %(cnt_nothing))
 print("有文本的比例：%f" %(cnt / len(content_list)))
 print("Connect Failed比例：%f" %(cnt_cntfail / len(content_list)))
 print("Nothing比例：%f" %(cnt_nothing / len(content_list)))
