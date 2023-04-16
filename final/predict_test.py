@@ -1,5 +1,5 @@
-# import sys
-# sys.path.append(".")
+import sys
+sys.path.append(".")
 
 from tool import feature_extraction_tool as fet
 from tool import classification_tool as ct
@@ -17,12 +17,12 @@ csv.field_size_limit(20000*6000)
 
 ori_url_list.extend(fet.read_csv_context(
                                 filename="./final/data/test_with_text_0416.csv",
-                                row_range = range(60000),
+                                row_range = range(20),
                                 col = 0))
 
 ori_text_list.extend(fet.read_csv_context(
                                 filename="./final/data/test_with_text_0416.csv",
-                                row_range = range(60000),
+                                row_range = range(20),
                                 col = 1))
 
 text_list = copy.deepcopy(ori_text_list)
@@ -52,7 +52,7 @@ print("去除停用词完成")
 
 #去除600词以下并归一化为600词
 #2023-3-19 for in range 有坑，对i的改动是不会影响下一次循环的
-word_set_list, label_list = fet.new_normalization_word_number(word_set_list,specifiedWordNum=200,thresholdWordNum=20)
+word_set_list, label_list = fet.new_normalization_word_number(word_set_list,specifiedWordNum=200,thresholdWordNum=0)
 print("归一化完成")
 
 
@@ -72,8 +72,8 @@ word_gather_vec = cupy.asnumpy(word_gather_vec)
 from keras.models import Sequential
 
 import keras
-
-model:Sequential = keras.models.load_model("./model/model_10_200_200_0416")
+import tensorflow as tf
+model:Sequential = tf.keras.models.load_model("./model/model_10_10_200_tf_0416")
 
 # 对测试集预测得到预测结果
 y_pred = model.predict(word_gather_vec)
