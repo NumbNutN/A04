@@ -24,19 +24,19 @@ from tool import classification_tool as ct
 
 
 text_list.extend(fet.read_csv_context(
-                                filename="./data/test.csv",
+                                filename="./data/train1.csv",
                                 row_range = range(3000000),
                                 col = 0))
     
-# label_list.extend(fet.read_csv_context(
-#                                 filename="./data/test.csv",
-#                                 row_range = range(30000),
-#                                 col = 2))
-
-content_list.extend(fet.read_csv_context(
-                                filename="./data/test.csv",
-                                row_range = range(3000000),
+label_list.extend(fet.read_csv_context(
+                                filename="./data/train1.csv",
+                                row_range = range(30000),
                                 col = 1))
+
+# content_list.extend(fet.read_csv_context(
+#                                 filename="./data/train1.csv",
+#                                 row_range = range(3000000),
+#                                 col = 1))
 
 
 
@@ -60,20 +60,20 @@ content_list.extend(fet.read_csv_context(
 # import pandas as pd
 
 
-idx:int = 0
-for i in range(len(content_list)):
-    if content_list[idx] == "Connect Failed" or content_list[idx] == "Nothing":
-        text_list.pop(idx)
-        # label_list.pop(idx)
-        content_list.pop(idx)
-    else:
-        idx+=1
+# idx:int = 0
+# for i in range(len(content_list)):
+#     if content_list[idx] == "Connect Failed" or content_list[idx] == "Nothing":
+#         text_list.pop(idx)
+#         # label_list.pop(idx)
+#         content_list.pop(idx)
+#     else:
+#         idx+=1
 
-data = {
-    'url':text_list,
-    'text':content_list,
-    # 'label':[int(label) for label in label_list]
-}
+# data = {
+#     'url':text_list,
+#     'text':content_list,
+#     # 'label':[int(label) for label in label_list]
+# }
 
 # df = pd.DataFrame(data)
 # df = df.sort_values(by='label',ascending=True)
@@ -84,7 +84,11 @@ data = {
 #                                     数据统计                                      #
 ####################################################################################
 
-
+cnt = 0
+#统计正常标签
+for label in label_list:
+    if label == '0':
+        cnt += 1
 
 # 统计一些数据
 cnt_cntfail = 0

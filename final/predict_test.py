@@ -10,6 +10,8 @@ import copy
 
 dfl = fet.DataFeature()
 
+spacy.prefer_gpu()
+
 ori_url_list = []
 ori_text_list = []
 
