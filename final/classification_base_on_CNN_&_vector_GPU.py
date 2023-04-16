@@ -169,7 +169,7 @@ model.fit(x_train, y_train, epochs=10, validation_data=(x_test, y_test))
 #model.save("./model/model_10_200_200_0416")
 
 import tensorflow as tf
-tf.keras.models.save_model(model,"./model/model_10_200_200_tf_0416")
+tf.keras.models.save_model(model,"./model/model_10_200_200_tf_0417.h5")
 # 对测试集预测得到预测结果
 y_pred = model.predict(x_test)
 
@@ -196,7 +196,7 @@ scores = model.evaluate(x_test,y_test)
 ###################################
 #          保存pred                #
 ##################################
-file_path = './final/label_and_pred_04161419.txt'
+file_path = './final/label_and_pred_04162359.txt'
 with open(file_path,mode='w',encoding='utf-8') as file_obj:
     file_obj.write("label\tpred\n")
     idx:int = 0

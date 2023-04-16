@@ -22,12 +22,12 @@ content_list = []
 from tool import classification_tool as ct
 
 label_list.extend(fet.read_csv_context(
-                                filename="./data/all_content.csv",
+                                filename="./data/test.csv",
                                 row_range = range(60000),
                                 col = 1))
 
 content_list.extend(fet.read_csv_context(
-                                filename="./data/all_content.csv",
+                                filename="./data/test.csv",
                                 row_range = range(60000),
                                 col = 0))
 

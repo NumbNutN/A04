@@ -27,10 +27,10 @@ text_list.extend(fet.read_csv_context(
                                 filename="./data/train1.csv",
                                 row_range = range(3000000),
                                 col = 0))
-    
+
 label_list.extend(fet.read_csv_context(
                                 filename="./data/train1.csv",
-                                row_range = range(30000),
+                                row_range = range(3000000),
                                 col = 1))
 
 # content_list.extend(fet.read_csv_context(
