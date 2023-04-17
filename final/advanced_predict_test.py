@@ -25,20 +25,12 @@ url_list.extend(fet.read_csv_context(
 
 text_list.extend(fet.read_csv_context(
                                 filename="./final/data/lost_test_with_content_0417.csv",
-                                row_range = range(1500,727),
+                                row_range = range(0,727),
                                 col = 1))
 
 # text_list = copy.deepcopy(ori_text_list)
 # url_list = copy.deepcopy(ori_url_list)
 
-
-# idx:int = 0
-# for i in range(len(text_list)):
-#     if text_list[idx] == "Connect Failed" or text_list[idx] == "Nothing":
-#         url_list.pop(idx)
-#         text_list.pop(idx)
-#     else:
-#         idx+=1
 
 # 加载分词工具
 nlp = spacy.load('zh_core_web_md')
@@ -54,26 +46,40 @@ batch_list = [range(0,500),
               range(3500,4000),
               range(4000,4552)]
 
-word_set_list = fet.split_to_word_set_from_sentence(nlp,text_list)
-print("分词完成")
-
-#去除停用词
-from spacy.lang.zh.stop_words import STOP_WORDS
-
-word_set_list = fet.word_set_throw_stop_word(word_set_list,list(STOP_WORDS))
-print("去除停用词完成")
-
 for batch_range in batch_list:
 
-    split_word_set_list = []
+    split_text_list = []
     for idx in batch_range:
-        if idx < len(word_set_list):
-            split_word_set_list.append(word_set_list[idx])
+        if idx < len(text_list):
+            split_text_list.append(text_list[idx])
 
     split_url_list = []
     for idx in batch_range:
         if idx < len(url_list):
             split_url_list.append(url_list[idx])
+
+    ################
+    #new
+    record_list = []
+    idx:int = 0
+    for i in range(len(split_text_list)):
+        if split_text_list[idx] == "Connect Failed" or split_text_list[idx] == "Nothing":
+            record_list.append([i,split_url_list[idx],split_text_list[idx]])
+            split_url_list.pop(idx)
+            split_text_list.pop(idx)
+        else:
+            idx+=1
+
+    split_word_set_list = fet.split_to_word_set_from_sentence(nlp,split_text_list)
+    print("分词完成")
+
+    #去除停用词
+    from spacy.lang.zh.stop_words import STOP_WORDS
+
+    split_word_set_list = fet.word_set_throw_stop_word(split_word_set_list,list(STOP_WORDS))
+    print("去除停用词完成")
+        
+
 
     #去除600词以下并归一化为600词
     #2023-3-19 for in range 有坑，对i的改动是不会影响下一次循环的
@@ -110,11 +116,15 @@ for batch_range in batch_list:
 
     label_list = [label+2 for label in label_list]
 
+    for record in record_list:
+        split_url_list:list.insert(record[0],record[1])
+        label_list:list.insert(record[0],record[2])
+
 
     import pandas as pd
     data = {
         'url':split_url_list,
-        'label':[int(label) for label in label_list]
+        'label':[label for label in label_list]
     }
 
     df = pd.DataFrame(data)
