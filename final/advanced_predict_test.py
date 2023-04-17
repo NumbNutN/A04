@@ -19,12 +19,12 @@ csv.field_size_limit(20000*6000)
 
 
 url_list.extend(fet.read_csv_context(
-                                filename="./final/data/lost_test_with_content_0417.csv",
+                                filename="./final/data/test_with_content_all.csv",
                                 row_range = range(0,727),
                                 col = 0))
 
 text_list.extend(fet.read_csv_context(
-                                filename="./final/data/lost_test_with_content_0417.csv",
+                                filename="./final/data/test_with_content_all.csv",
                                 row_range = range(0,727),
                                 col = 1))
 
@@ -36,7 +36,7 @@ text_list.extend(fet.read_csv_context(
 nlp = spacy.load('zh_core_web_md')
 
 
-batch_list = [range(0,500),
+batch_list = [range(1,500),
               range(500,1000),
               range(1000,1500),
               range(1500,2000),
@@ -44,7 +44,21 @@ batch_list = [range(0,500),
               range(2500,3000),
               range(3000,3500),
               range(3500,4000),
-              range(4000,4552)]
+              range(4000,4500),
+              range(4500,5000),
+              range(5000,5500),
+              range(5500,6000),
+              range(6000,6500),
+              range(6500,7000),
+              range(7000,7500),
+              range(7500,8000),
+              range(8000,8500),
+              range(8500,9000),
+              range(9000,9500),
+              range(9500,10000),
+              range(10000,10500),
+              range(10500,11000),
+              range(11000,11147),]
 
 for batch_range in batch_list:
 
@@ -64,7 +78,7 @@ for batch_range in batch_list:
     idx:int = 0
     for i in range(len(split_text_list)):
         if split_text_list[idx] == "Connect Failed" or split_text_list[idx] == "Nothing":
-            record_list.append([i,split_url_list[idx],split_text_list[idx]])
+            record_list.append([i,split_url_list[idx],"Connect Failed"])
             split_url_list.pop(idx)
             split_text_list.pop(idx)
         else:
@@ -114,11 +128,12 @@ for batch_range in batch_list:
 
     #标签重映射
 
-    label_list = [label+2 for label in label_list]
+    label_list = [str(label+2) for label in label_list]
+    
 
     for record in record_list:
-        split_url_list:list.insert(record[0],record[1])
-        label_list:list.insert(record[0],record[2])
+        split_url_list.insert(record[0],record[1])
+        label_list.insert(record[0],record[2])
 
 
     import pandas as pd
@@ -129,4 +144,4 @@ for batch_range in batch_list:
 
     df = pd.DataFrame(data)
     #df = df.sort_values(by='label',ascending=True)
-    df.to_csv("./final/data/lost_test_pred_0417.csv",sep=',',mode='a',header=False,index=False,encoding='utf-8')
+    df.to_csv("./final/data/test_all_pred_0417.csv",sep=',',mode='a',header=False,index=False,encoding='utf-8')
