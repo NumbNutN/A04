@@ -62,7 +62,7 @@ import pandas as pd
 
 idx:int = 0
 for i in range(len(content_list)):
-    if content_list[idx] == "Connect Failed" or content_list[idx] == "Nothing":
+    if content_list[idx] != "Connect Failed" and content_list[idx] != "Nothing":
         text_list.pop(idx)
         #label_list.pop(idx)
         content_list.pop(idx)
@@ -77,7 +77,7 @@ data = {
 
 df = pd.DataFrame(data)
 #df = df.sort_values(by='label',ascending=True)
-df.to_csv("./final/data/test_with_text_content.csv",sep=',',mode='w',header=False,index=False,encoding='utf-8')
+df.to_csv("./final/data/test_with_text_without_content.csv",sep=',',mode='w',header=False,index=False,encoding='utf-8')
 
 
 ####################################################################################
