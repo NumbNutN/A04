@@ -20,12 +20,12 @@ csv.field_size_limit(20000*6000)
 
 url_list.extend(fet.read_csv_context(
                                 filename="./final/data/test_with_content_all.csv",
-                                row_range = range(0,727),
+                                row_range = range(1,11147),
                                 col = 0))
 
 text_list.extend(fet.read_csv_context(
                                 filename="./final/data/test_with_content_all.csv",
-                                row_range = range(0,727),
+                                row_range = range(1,11147),
                                 col = 1))
 
 # text_list = copy.deepcopy(ori_text_list)
@@ -36,7 +36,7 @@ text_list.extend(fet.read_csv_context(
 nlp = spacy.load('zh_core_web_md')
 
 
-batch_list = [range(1,500),
+batch_list = [range(0,500),
               range(500,1000),
               range(1000,1500),
               range(1500,2000),
@@ -58,7 +58,7 @@ batch_list = [range(1,500),
               range(9500,10000),
               range(10000,10500),
               range(10500,11000),
-              range(11000,11147),]
+              range(11000,11146),]
 
 for batch_range in batch_list:
 
