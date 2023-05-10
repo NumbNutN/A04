@@ -24,7 +24,7 @@ url_list.extend(fet.read_csv_context(
                                 col = 0))
 
 url_list.extend(fet.read_csv_context(
-                                filename="./final/data/normal.csv",
+                                filename="./final/data/normal_all_all_pred_0417.csv",
                                 row_range = range(0,2000000),
                                 col = 0))
 
@@ -34,7 +34,7 @@ label_list.extend(fet.read_csv_context(
                                 col = 1))
 
 label_list.extend(fet.read_csv_context(
-                                filename="./final/data/normal.csv",
+                                filename="./final/data/normal_all_all_pred_0417.csv",
                                 row_range = range(0,2000000),
                                 col = 1))
 
