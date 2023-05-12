@@ -27,7 +27,7 @@ import pandas as pd
 nlp = spacy.load('zh_core_web_md')
 
 # 对文本进行分词
-word_list = fet.split_word_from_sentence_array(nlp,x_train)
+word_list = fet.split_to_word_set_from_sentence(nlp,x_train)
 # 拆分成128
 word_list,label_list =  fet.new_normalization_word_number(word_list,y_train,specifiedWordNum=128)
 # 合并
@@ -46,7 +46,7 @@ df.to_csv("./bert_data/all_content_split_train.csv",sep=',',mode='w',header=Fals
 
 
 # 对文本进行分词
-word_list = fet.split_word_from_sentence_array(nlp,x_test)
+word_list = fet.split_to_word_set_from_sentence(nlp,x_test)
 # 拆分成128
 word_list,y_test =  fet.new_normalization_word_number(word_list,y_test,specifiedWordNum=128)
 # 合并
