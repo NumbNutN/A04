@@ -17,6 +17,8 @@ import numpy as np
 #降维等其他矩阵运算
 from sklearn.manifold import TSNE
 
+from tqdm import tqdm
+
 class DataFeature:
 
     #从项目根路径开始
@@ -87,6 +89,22 @@ class DataFeature:
         {"fileName":"all_content.csv","type":"中奖诈骗","range":range(52125,52126)}             #12     1       10
     ]
 
+    all_without_split_dataFeatureList:list = \
+    [
+        {"fileName":"all_content.csv","type":"购物消费","range":range(0,2)},                    #1      2       0
+        {"fileName":"all_content.csv","type":"婚恋交友","range":range(2,6901)},                 #2      6899    1
+        {"fileName":"all_content.csv","type":"假冒身份","range":range(6901,6937)},              #3      36      2
+        {"fileName":"all_content.csv","type":"钓鱼网站","range":range(6937,7113)},              #4      176     3
+        {"fileName":"all_content.csv","type":"冒充公检法","range":range(7113,7174)},            #5      61      4
+        {"fileName":"all_content.csv","type":"平台诈骗","range":range(7174,8649)},              #6      1475    5
+        {"fileName":"all_content.csv","type":"招聘兼职","range":range(8649,8657)},              #7      8       6
+        {"fileName":"all_content.csv","type":"杀猪盘","range":range(8657,8757)},                #8      100     7
+        {"fileName":"all_content.csv","type":"博彩赌博","range":range(8757,9095)},              #9      338     8
+        {"fileName":"all_content.csv","type":"信贷理财","range":range(9095,10081)},             #10     986     9
+        {"fileName":"all_content.csv","type":"刷单诈骗","range":range(10081,10662)},            #11     581     10
+        {"fileName":"all_content.csv","type":"中奖诈骗","range":range(10662,10664)}             #12     2       11
+    ]
+
 
  
 def read_csv_context(filename:str,row_range:range,col:int = 1,decode:str='utf-8') -> list:
@@ -116,9 +134,10 @@ def read_csv_context(filename:str,row_range:range,col:int = 1,decode:str='utf-8'
     """
     data = []
     cnt = 0
+    print("filename:%s col:%d",filename,col)
     with open(filename,encoding=decode) as csvfile:
         csv_reader = csv.reader(csvfile)
-        for row in csv_reader:
+        for row in tqdm(csv_reader):
             if cnt in row_range:
                 data.append(row[col])
             cnt += 1
@@ -150,8 +169,9 @@ def read_xlsx_context(filename:str,row_range:range,col:int) -> list:
     ws = load_workbook(filename)
     data:list = []
 
+    print("filename:%s col:%d",filename,col)
     cnt:int = 0
-    for cell in ws["Sheet1"][mapping_dict[col]]:
+    for cell in tqdm(ws["Sheet1"][mapping_dict[col]]):
         if cnt in row_range:
             data.append(cell.value)
         cnt += 1
@@ -247,7 +267,7 @@ def split_word_from_sentence_array(nlp:spacy.Language,sentence_arr:list,split_wo
         
     return sentence_list
 
-def split_to_word_set_from_sentence(nlp:spacy.Language,sentence:'str|list',throwStopWord:bool = False) -> 'list[list[str]]|list[str]':
+def split_to_word_set_from_sentence(nlp:spacy.Language,sentences:'str|list',throwStopWord:bool = False) -> 'list[list[str]]|list[str]':
     """将一个句子列表以单词为单位分割为单词的列表
 
     Args:
@@ -267,14 +287,15 @@ def split_to_word_set_from_sentence(nlp:spacy.Language,sentence:'str|list',throw
         Last update on 2023-4-10
         
     """
-    if(type(sentence) == list):
+    print("分词中")
+    if(type(sentences) == list):
         word_gather_list = []
-        for sentence in sentence:
+        for sentence in tqdm(sentences):
             words = nlp(sentence)
             word_gather_list.append([str(word) for word in words])
         return word_gather_list
-    elif(type(sentence) == str):
-        words = nlp(sentence)
+    elif(type(sentences) == str):
+        words = nlp(sentences)
         word_gather = [str(word) for word in words]
         return word_gather
 
@@ -313,7 +334,41 @@ def normalization_word_number(wordSet:'list[list[str]]|list[str]',labelList:list
             return []
         else:
             return wordSet[0:number] 
-        
+
+def throw_lower_than_threshold(wordSet:'list[list[str]]|list[str]',labelList:list = [],thresholdWordNum:int=0) ->list:
+    """归一化单词数量，当数量小于specifiedWordNum时会重复填充，大于specifiedWordNum时会归一到specifiedWordNum的数量
+
+    Args:
+        wordList (list): 需要归一化的单词集，为单词集合的列表
+        labelList (list):根据单词集的剔除情况
+        specifiedWordNum (int):归一化数量
+
+    Returns:
+        list: 归一化后的列表
+
+    Info:
+        Created by LGD on 2023-3-19
+    """
+    if(type(wordSet[0]) == list):
+        i:int = 0
+        cnt:int = 0
+        ori_len:int = len(wordSet)
+        while i < ori_len - cnt:
+            if len(wordSet[i]) <= thresholdWordNum:
+                wordSet.pop(i)
+                if(len(labelList)!=0):
+                    labelList.pop(i)
+                cnt += 1
+                i -= 1
+            print("上一次数量",len(wordSet[i]))
+            i+=1
+
+        return wordSet,labelList
+    
+    elif(type(wordSet[0]) == str):
+        if len(wordSet[i]) <= thresholdWordNum:
+            return "",[]
+  
 def new_normalization_word_number(wordSet:'list[list[str]]|list[str]',labelList:list = [],specifiedWordNum:int=0,thresholdWordNum:int=0) ->list:
     """归一化单词数量，当数量小于specifiedWordNum时会重复填充，大于specifiedWordNum时会归一到specifiedWordNum的数量
 

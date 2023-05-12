@@ -44,7 +44,7 @@ content_list.extend(fet.read_csv_context(
 
 
 #train2
-label_list.extend(ct.get_label_from_csv(
+label_list.extend(ct.read_csv_label_a2i(
                             filename="./data/train2.csv",
                             row_range =range(2,30000)
                             ))

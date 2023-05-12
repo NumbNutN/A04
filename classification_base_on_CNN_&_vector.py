@@ -35,7 +35,7 @@ for i in range(0,3):
                                 col = 1))
     
     # 由于kears要求使用数字作为标签
-    label_list.extend(ct.get_label_from_csv(
+    label_list.extend(ct.read_csv_label_a2i(
                                 filename="./data/"+dfl.dataFeatureList[i]["fileName"],
                                 row_range =dfl.dataFeatureList[i]["range"][0:200]
                                 ))

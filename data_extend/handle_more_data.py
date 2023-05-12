@@ -24,12 +24,12 @@ from tool import classification_tool as ct
 
 
 text_list.extend(fet.read_csv_context(
-                                filename="./data/train1.csv",
+                                filename="./data/all_content_without_split.csv",
                                 row_range = range(3000000),
                                 col = 0))
 
 label_list.extend(fet.read_csv_context(
-                                filename="./data/train1.csv",
+                                filename="./data/all_content_without_split.csv",
                                 row_range = range(3000000),
                                 col = 1))
 
@@ -84,31 +84,31 @@ label_list.extend(fet.read_csv_context(
 #                                     数据统计                                      #
 ####################################################################################
 
-cnt = 0
-#统计正常标签
-for label in label_list:
-    if label == '0':
-        cnt += 1
+# cnt = 0
+# #统计正常标签
+# for label in label_list:
+#     if label == '0':
+#         cnt += 1
 
-# 统计一些数据
-cnt_cntfail = 0
-cnt =0
-cnt_nothing = 0
-for i in range(len(content_list)):
-    if content_list[i] != "Connect Failed" and content_list[i] != "Nothing":
-        cnt+=1
-    if content_list[i] == "Connect Failed":
-        cnt_cntfail+=1
-    if content_list[i] =="Nothing":
-        cnt_nothing+=1
+# # 统计一些数据
+# cnt_cntfail = 0
+# cnt =0
+# cnt_nothing = 0
+# for i in range(len(content_list)):
+#     if content_list[i] != "Connect Failed" and content_list[i] != "Nothing":
+#         cnt+=1
+#     if content_list[i] == "Connect Failed":
+#         cnt_cntfail+=1
+#     if content_list[i] =="Nothing":
+#         cnt_nothing+=1
 
-print("网址总数 %d" %(len(content_list)))
-print("有文本的数量 %d" %(cnt))
-print("Connect Failed数量 %d" %(cnt_cntfail))
-print("Nothing数量 %d" %(cnt_nothing))
-print("有文本的比例：%f" %(cnt / len(content_list)))
-print("Connect Failed比例：%f" %(cnt_cntfail / len(content_list)))
-print("Nothing比例：%f" %(cnt_nothing / len(content_list)))
+# print("网址总数 %d" %(len(content_list)))
+# print("有文本的数量 %d" %(cnt))
+# print("Connect Failed数量 %d" %(cnt_cntfail))
+# print("Nothing数量 %d" %(cnt_nothing))
+# print("有文本的比例：%f" %(cnt / len(content_list)))
+# print("Connect Failed比例：%f" %(cnt_cntfail / len(content_list)))
+# print("Nothing比例：%f" %(cnt_nothing / len(content_list)))
 
 
 ####################################################################################
@@ -117,23 +117,18 @@ print("Nothing比例：%f" %(cnt_nothing / len(content_list)))
 
 
 
-# label_list.extend(fet.read_csv_context(
-#                                 filename="./data/"+dfl.dataFeatureList[8]["fileName"],
-#                                 row_range = dfl.dataFeatureList[8]["range"],
-#                                 col = 2))
+info_list = []
 
-# info_list = []
-
-# oldlabel:str = ''
-# oldcnt:int=0
-# idx:int=0
-# for label in label_list:
-#     if label != oldlabel:
-#         info_list.append({'label':oldlabel,'count':oldcnt,'start':idx-oldcnt,'end':idx})
-#         oldcnt=0
-#         oldlabel=label
-#     oldcnt+=1
-#     idx+=1
+oldlabel:str = ''
+oldcnt:int=0
+idx:int=0
+for label in label_list:
+    if label != oldlabel:
+        info_list.append({'label':oldlabel,'count':oldcnt,'start':idx-oldcnt,'end':idx})
+        oldcnt=0
+        oldlabel=label
+    oldcnt+=1
+    idx+=1
 
 
 pass

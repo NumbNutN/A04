@@ -38,7 +38,7 @@ class label:
         """
         return label.label_dict[str_label]
 
-def get_label_from_csv(filename:str,row_range:range) -> list:
+def read_csv_label_a2i(filename:str,row_range:range) -> list:
     """从csv依据指定行数获取标签序号
         "正常":0,
         "购物消费":1,

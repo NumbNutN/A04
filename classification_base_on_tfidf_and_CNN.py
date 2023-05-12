@@ -3,8 +3,6 @@ from tool import classification_tool as ct
 import spacy
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
-# 数据测试集切分
-from sklearn.model_selection import train_test_split
 import time
 ####################################################################################
 #                                     数据选择                                      #
@@ -26,7 +24,7 @@ for i in [0,1,2]:
                                 col = 1))
     
     # 由于kears要求使用数字作为标签
-    label_list.extend(ct.get_label_from_csv(
+    label_list.extend(ct.read_csv_label_a2i(
                                 filename="./data/"+dfl.dataFeatureList[i]["fileName"],
                                 row_range =dfl.dataFeatureList[i]["range"][0:20]
                                 ))
@@ -56,6 +54,9 @@ print("分词完成", flush=True)
 
 vectorizer = TfidfVectorizer(max_features=3000)
 vectorizer = vectorizer.fit_transform(word_list)
+
+# 数据测试集切分
+from sklearn.model_selection import train_test_split
 
 x_train, x_test,y_train, y_test = \
 train_test_split(vectorizer,label_list,
