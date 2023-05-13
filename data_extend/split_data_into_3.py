@@ -44,7 +44,7 @@ data = {
 }
 df = pd.DataFrame(data)
 df = df.sort_values(by='label',ascending=True)
-#df.to_csv("./bert_data/all_content_split_train.csv",sep=',',mode='w',header=False,index=False,encoding='utf-8')
+df.to_csv("./bert_data/all_content_split_train.csv",sep=',',mode='w',header=False,index=False,encoding='utf-8')
 
 
 # 对文本进行分词
