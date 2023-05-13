@@ -400,7 +400,7 @@ def new_normalization_word_number(wordSet:'list[list[str]]|list[str]',labelList:
                     labelList.pop(i)
                 cnt += 1
                 i -= 1
-            print("上一次数量",len(wordSet[i]))
+            #print("上一次数量",len(wordSet[i]))
             if(len(wordSet[i])!= specifiedWordNum):
                 pass
             i+=1
