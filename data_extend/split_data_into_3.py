@@ -30,6 +30,8 @@ nlp = spacy.load('zh_core_web_md')
 word_list = fet.split_to_word_set_from_sentence(nlp,x_train)
 # 拆分成128
 word_list,y_train =  fet.expand_content(word_list,y_train,specifiedWordNum=128)
+# 归一化
+word_list,y_train =  fet.new_normalization_word_number(word_list,y_train,specifiedWordNum=128,thresholdWordNum=30)
 # 合并
 x_train = []
 for word_set in word_list:
@@ -49,6 +51,8 @@ df = df.sort_values(by='label',ascending=True)
 word_list = fet.split_to_word_set_from_sentence(nlp,x_test)
 # 拆分成128
 word_list,y_test =  fet.expand_content(word_list,y_test,specifiedWordNum=128)
+# 归一化
+word_list,y_test =  fet.new_normalization_word_number(word_list,y_test,specifiedWordNum=128,thresholdWordNum=30)
 # 合并
 x_test = []
 for word_set in word_list:
