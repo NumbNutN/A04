@@ -3,6 +3,7 @@
 !/data/more_supplement2_seq_0413.csv
 !/data/train2.csv
 !/data/all_content.csv
+!/data/all_content_without_split.csv
 /tool/__pycache__
 /driver/go-cqhttp_windows_386
 /script
