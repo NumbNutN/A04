@@ -24,6 +24,7 @@ train_test_split(text_list,label_list,
                  test_size=0.2,random_state=0)
 import pandas as pd
 # 加载分词工具
+print("是否可用gpu:"+str(spacy.prefer_gpu()))
 nlp = spacy.load('zh_core_web_md')
 
 # 对文本进行分词
