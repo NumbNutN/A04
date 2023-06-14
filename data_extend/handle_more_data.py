@@ -24,12 +24,12 @@ from tool import classification_tool as ct
 
 
 text_list.extend(fet.read_csv_context(
-                                filename="./data/all_content_split_train.csv",
+                                filename="./bert_data/all_content_split_train.csv",
                                 row_range = range(3000000),
                                 col = 0))
 
 label_list.extend(fet.read_csv_context(
-                                filename="./data/all_content_split_train.csv",
+                                filename="./bert_data/all_content_split_train.csv",
                                 row_range = range(3000000),
                                 col = 1))
 
@@ -116,24 +116,24 @@ label_list.extend(fet.read_csv_context(
 ####################################################################################
 
 
-class_list = ["购物消费","婚恋交友", "假冒身份" ,"钓鱼网站", "冒充公检法" ,"平台诈骗" ,"招聘兼职" ,"杀猪盘" ,"博彩赌博" ,"信贷理财" ,"刷单诈骗","中奖诈骗" ]
-info_list = []
+# class_list = ["","购物消费","婚恋交友", "假冒身份" ,"钓鱼网站", "冒充公检法" ,"平台诈骗" ,"招聘兼职" ,"杀猪盘" ,"博彩赌博" ,"信贷理财" ,"刷单诈骗","中奖诈骗" ]
+# info_list = []
 
-oldlabel:str = ''
-oldcnt:int=0
-idx:int=0
-for label in label_list:
-    if label != oldlabel:
-        info_list.append({'label':oldlabel,'count':oldcnt,'start':idx-oldcnt,'end':idx})
-        oldcnt=0
-        oldlabel=label
-    oldcnt+=1
-    idx+=1
+# oldlabel:str = ''
+# oldcnt:int=0
+# idx:int=0
+# for label in label_list:
+#     if label != oldlabel:
+#         info_list.append({'label':oldlabel,'count':oldcnt,'start':idx-oldcnt,'end':idx})
+#         oldcnt=0
+#         oldlabel=label
+#     oldcnt+=1
+#     idx+=1
 
 
-for idx in range(len(info_list)):
-    if(idx == 0):
-        continue
-    print("\"filename\":\"all_content_split_train.csv\",\"type\": \" %s \" , \"range\": \"range( %s , %s ) \"",class_list[idx-1],str(info_list['start']),str(info_list['end']))
-pass
+# for idx in range(len(info_list)):
+#     if(idx == 0):
+#         continue
+#     print("{\"filename\":\"all_content_split_train.csv\",\"type\": \"%s\" , \"range\":range(%s,%s)},    #%d" %(class_list[int(info_list[idx]['label'])],str(info_list[idx]['start']),str(info_list[idx]['end']),info_list[idx]['end'] - info_list[idx]['start']))
+# pass
 

@@ -105,6 +105,35 @@ class DataFeature:
         {"fileName":"all_content.csv","type":"中奖诈骗","range":range(10662,10664)}             #12     2       11
     ]
 
+    train_split_dataFeature:dict = \
+    {
+        "购物消费":{"filename":"all_content_split_train.csv", "range":range(0,2)},            
+        "婚恋交友":{"filename":"all_content_split_train.csv","range":range(2,41919)},         #41917  
+        "假冒身份":{"filename":"all_content_split_train.csv", "range":range(41919,42117)},     #200
+        "钓鱼网站":{"filename":"all_content_split_train.csv", "range":range(42117,42664)},     #547
+        "冒充公检法":{"filename":"all_content_split_train.csv","range":range(42664,42872)},   #208
+        "平台诈骗":{"filename":"all_content_split_train.csv","range":range(42872,56297)},     #13425
+        "招聘兼职":{"filename":"all_content_split_train.csv","range":range(56297,56321)},     #24
+        "杀猪盘":{"filename":"all_content_split_train.csv","range":range(56321,56427)},       #106
+        "博彩赌博":{"filename":"all_content_split_train.csv", "range":range(56427,58248)},     #1821
+        "信贷理财":{"filename":"all_content_split_train.csv","range":range(58248,63208)},     #4960
+        "刷单诈骗":{"filename":"all_content_split_train.csv","range":range(63208,65315)}      #2107
+    }
+
+    test_split_dataFeature:dict = \
+    {
+        "婚恋交友":{"filename":"all_content_split_train.csv", "range":range(0,11348)},    #11348
+        "假冒身份":{"filename":"all_content_split_train.csv", "range":range(11348,11387)},    #39
+        "钓鱼网站":{"filename":"all_content_split_train.csv", "range":range(11387,11602)},    #215
+        "冒充公检法":{"filename":"all_content_split_train.csv", "range":range(11602,11647)},    #45
+        "平台诈骗":{"filename":"all_content_split_train.csv", "range":range(11647,14182)},    #2535
+        "招聘兼职":{"filename":"all_content_split_train.csv", "range":range(14182,14241)},    #59
+        "杀猪盘":{"filename":"all_content_split_train.csv", "range":range(14241,14271)},    #30
+        "博彩赌博":{"filename":"all_content_split_train.csv", "range":range(14271,14526)},    #255
+        "信贷理财":{"filename":"all_content_split_train.csv", "range":range(14526,15713)},    #1187
+        "刷单诈骗":{"filename":"all_content_split_train.csv", "range":range(15713,16501)}    #788
+    }
+
 
  
 def read_csv_context(filename:str,row_range:range,col:int = 1,decode:str='utf-8') -> list:
@@ -415,7 +444,30 @@ def new_normalization_word_number(wordSet:'list[list[str]]|list[str]',labelList:
         else:
             return wordSet[0:specifiedWordNum]
         
+def throw_context_including_spe_substr(contentList:'list[str]',labelList:list,substrList:'list[str]') -> 'tuple[list[str],list]':
+    """含有子串的文本剔除
 
+    Args:
+        contentList (list[str]): _description_
+        labelList (list): _description_
+
+    Returns:
+        tuple[list[str],list]: _description_
+    """
+    i:int = 0
+    cnt:int = 0
+    ori_len:int = len(contentList)
+    while i < ori_len - cnt:
+        for substr in substrList:
+            if (substr in contentList[i]):
+                contentList.pop(i)
+                if(len(labelList)!=0):
+                    labelList.pop(i)
+                cnt += 1
+                i -= 1
+        i+=1
+
+    return contentList,labelList    
         
 def word_set_throw_stop_word(wordSet:'list[str]|list[list[str]]',stopWord:list) ->'list[list[str]]|list[str]':
     """依据停用词列表去除停用词
@@ -622,3 +674,49 @@ def label_reflect2class(label_list:'list[int]',n_class:int) -> 'list[int]':
     # 映射表创建完成
     new_label_list = [reflect_label_dict[label] for label in label_list]
     return new_label_list
+
+
+def random_pick(texts:'list[str]',labels:'list[int] | list[str]',proportion:float):
+    #随机抽选
+    import pandas as pd
+    data = \
+    {
+        "text":texts,
+        "label":labels
+    }
+    line_label = [str(i) for i in range(len(labels))]
+    df = pd.DataFrame(data,index=line_label)
+    #交换部分帧
+    sample = df.sample(n=int(proportion*len(labels)), frac=None, replace=False, weights=None,
+            random_state=1,axis=0)
+    return sample["text"].tolist(),sample["label"].tolist() 
+
+def calculate_class(label_list:'list[int]',class_list:'list[str]'):
+
+    label_list = [int(label) for label in label_list]
+    info_list = []
+    oldlabel:int = label_list[0]
+    oldcnt:int=0
+    idx:int=0
+    for label in label_list:
+        if label != oldlabel:
+            info_list.append({'label':class_list[oldlabel],'count':oldcnt,'start':idx-oldcnt,'end':idx})
+            oldcnt=0
+            oldlabel=label
+        oldcnt+=1
+        idx+=1
+    info_list.append({'label':class_list[oldlabel],'count':oldcnt,'start':idx-oldcnt,'end':idx})
+
+    for idx in range(len(info_list)):
+        print("%s %d" %(info_list[idx]['label'],info_list[idx]['count']))
+
+def simple_calculate_class(label_list:'list[int]',class_list:'list[str]'):
+    label_list = [int(label) for label in label_list]
+    info_list = dict()
+    for class_name in class_list:
+        info_list[class_name] = 0
+    for label in label_list:
+        info_list[class_list[label]] += 1
+
+    for class_name in info_list:
+        print("%s:  %d" %(class_name, info_list[class_name]))

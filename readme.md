@@ -207,3 +207,8 @@ import tensorflow as tf
 ### 模型命名规范
 
 model_分类数_每个分类文本数_每个文本单词数_训练日期
+
+
+### 文件描述
+train_with_split_data_BERT_BILSTM_sentence_input limited_test_6_12.py
+减少数据集的测试代码
